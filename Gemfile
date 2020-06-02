@@ -3,27 +3,35 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.7.0'
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.3', '>= 6.0.3.1'
-# Use sqlite3 as the database for Active Record
-gem 'pg', '~> 1.2', '>= 1.2.3'
-# Use Puma as the app server
-gem 'puma', '~> 4.1'
-# Use SCSS for stylesheets
+
+# friends of Rails
 gem 'sass-rails', '>= 6'
-# Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
+
 gem 'webpacker', '~> 4.0'
+
+# database
+gem 'pg', '~> 1.2', '>= 1.2.3'
+
+# JSON builder
+gem 'jbuilder', '~> 2.7'
+
+# Application server
+gem 'puma', '~> 4.1'
+
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '~> 5'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.7'
+
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
+
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
+
+# Environment setup
 gem 'dotenv-rails'
 
 # Reduces boot times through caching; required in config/boot.rb
@@ -35,18 +43,25 @@ group :development, :test do
 end
 
 group :development do
-  # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
+  # Access an IRB console on exception pages or by using <%= console %> anywhere in the code..
   gem 'web-console', '>= 3.3.0'
+
+  # Reenable after https://github.com/rails/rails/issues/26158 is fixed
   gem 'listen', '~> 3.2'
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+
+  # speeds up development by keeping your application running in the background
   gem 'spring'
+
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
 group :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15'
+
+  # Automated browser testing
   gem 'selenium-webdriver'
+
   # Easy installation and use of web drivers to run system tests with browsers
   gem 'webdrivers'
 end
