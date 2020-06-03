@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 2020_06_03_131536) do
     t.string "password_digest", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "role", default: "regular_user", null: false
+    t.integer "role", default: 0, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

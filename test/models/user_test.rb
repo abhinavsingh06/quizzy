@@ -3,7 +3,7 @@ require 'test_helper'
 class UserTest < ActiveSupport::TestCase
 
   def setup
-    @user = User.new(first_name: "Example", last_name: "User" , email: "user@example.com", password: "welcome")
+    @user = User.new(first_name: "Example", last_name: "User" , email: "user@example.com", password: "welcome", role: 0)
   end
 
   test "user should be valid" do
@@ -82,5 +82,13 @@ class UserTest < ActiveSupport::TestCase
     @user.email = test_email
     @user.save
     assert_equal test_email.downcase, @user.email
+  end
+
+  test "user should have a valid role" do
+    invalid_role = "invalid_role"
+    error = assert_raise ArgumentError do
+      @user.role = invalid_role
+    end
+    assert_equal "'#{invalid_role}' is not a valid role", error.message
   end
 end
