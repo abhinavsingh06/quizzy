@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   before_save { email.downcase! }
-  enum role: [:regular_user, :admin]
+  enum role: [:regular_user, :administrator]
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   validates :first_name, :last_name, presence: true, length: { maximum: 50 }
   validates :email, presence: true, uniqueness: true, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX }
