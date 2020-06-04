@@ -27,7 +27,7 @@ class New extends React.Component {
         console.log(response);
       },
       successCallBack: () => {
-        window.location.href = 'http://localhost:3000/';
+        window.location.href = Routes.quizzes_path();
       },
     });
   };

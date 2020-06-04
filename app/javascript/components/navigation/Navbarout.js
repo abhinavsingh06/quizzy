@@ -1,5 +1,6 @@
 import React from 'react';
 import { fetchApi } from '../../utils/API';
+import * as Routes from '../../utils/Routes';
 
 class Navbarout extends React.Component {
   constructor(props) {
@@ -11,7 +12,7 @@ class Navbarout extends React.Component {
     let logout = confirm('Are you sure you want to logout?');
     if (logout) {
       fetchApi({
-        url: Routes.logout_path(),
+        url: Routes.logout_path(this.props.user.id),
         method: 'DELETE',
         onError: response => {
           console.error(response);
@@ -20,21 +21,20 @@ class Navbarout extends React.Component {
           console.log(response);
         },
         successCallBack: () => {
-          window.location.replace(Routes.login_path());
+          window.location.href = '/';
         },
       });
     }
   };
 
   render() {
-    const { first_name } = this.props;
-    console.log(first_name);
+    const { user } = this.props;
     return (
       <div>
         <nav className="navbar navbar-dark bg-primary">
           <a className="navbar-brand">Quizzy</a>
           <div className="nav justify-content-end">
-            <a className="navbar-brand">{first_name}</a>
+            <a className="navbar-brand">{user.first_name}</a>
             <li
               type="submit"
               className="navbar-brand"
