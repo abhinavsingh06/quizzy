@@ -21,7 +21,7 @@ class New extends React.Component {
         login: this.state.user,
       },
       onError: response => {
-        console.error(response);
+        console.log(response);
       },
       onSuccess: response => {
         console.log(response);
@@ -58,6 +58,7 @@ class New extends React.Component {
                 className="form-control"
                 id="exampleInputPassword1"
                 name="password"
+                value={this.state.password}
                 onChange={this.handleChange}></input>
             </div>
             <button type="submit" className="btn btn-primary">
