@@ -46,12 +46,12 @@ class New extends React.Component {
       url: Routes.login_path(),
       method: 'POST',
       body: {
-        login: this.state.user,
+        session: this.state.user,
       },
       onError: this.updateAlert,
       onSuccess: this.updateAlert,
       successCallBack: () => {
-        // window.location.href = Routes.quizzes_path();
+        window.location.href = Routes.quizzes_path();
       },
     });
   };

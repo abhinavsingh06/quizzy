@@ -10,6 +10,6 @@ class ActiveSupport::TestCase
   # Add more helper methods to be used by all tests here...
 
   def log_in_as(user)
-    p post session_index_path, params: { login:{ email: user.email, password: user.password } }
+    post session_index_path, params: { session:{ email: user.email, password: user.password } }
   end
 end
