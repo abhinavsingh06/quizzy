@@ -1,13 +1,13 @@
-export function session_index() {
-  return '/session/new';
+export function new_session_path() {
+  return '/sessions/new';
 }
 
 export function login_path() {
-  return '/session';
+  return '/sessions';
 }
 
-export function logout_path(id) {
-  return `/session/${id}`;
+export function logout_path() {
+  return '/sessions';
 }
 
 export function quizzes_path() {

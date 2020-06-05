@@ -11,7 +11,7 @@ class Navbarin extends React.Component {
       <div>
         <nav className="navbar navbar-dark bg-primary">
           <a className="navbar-brand">Quizzy</a>
-          <a className="navbar-brand" href={Routes.session_index()}>
+          <a className="navbar-brand" href={Routes.new_session_path()}>
             Login
           </a>
         </nav>

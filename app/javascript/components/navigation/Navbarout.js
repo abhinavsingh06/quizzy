@@ -12,7 +12,7 @@ class Navbarout extends React.Component {
     let logout = confirm('Are you sure you want to logout?');
     if (logout) {
       fetchApi({
-        url: Routes.logout_path(this.props.user.id),
+        url: Routes.logout_path(),
         method: 'DELETE',
         onError: response => {
           console.error(response);
