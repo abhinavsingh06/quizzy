@@ -1,12 +1,40 @@
 import React from 'react';
 import { fetchApi } from '../../utils/API';
 import * as Routes from '../../utils/Routes';
+import Alert from '../../shared/Alert';
 
 class New extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { user: { email: '', password: '' } };
+    this.state = {
+      user: { email: '', password: '' },
+      alert: {
+        message: null,
+        type: null,
+      },
+    };
   }
+
+  updateAlert = response => {
+    this.setState({
+      alert: {
+        message: response.messages,
+        type: response.type,
+      },
+    });
+  };
+
+  displayErrors = () => {
+    const { message, type } = this.state.alert;
+
+    return (
+      <div className="row">
+        <div className="mt-4">
+          <Alert type={type} messages={message} />
+        </div>
+      </div>
+    );
+  };
 
   handleChange = ({ target: { name, value } }) => {
     this.setState({ user: { ...this.state.user, [name]: value } });
@@ -20,14 +48,10 @@ class New extends React.Component {
       body: {
         login: this.state.user,
       },
-      onError: response => {
-        console.log(response);
-      },
-      onSuccess: response => {
-        console.log(response);
-      },
+      onError: this.updateAlert,
+      onSuccess: this.updateAlert,
       successCallBack: () => {
-        window.location.href = Routes.quizzes_path();
+        // window.location.href = Routes.quizzes_path();
       },
     });
   };
@@ -36,6 +60,7 @@ class New extends React.Component {
     return (
       <>
         <div className="container">
+          {this.state.alert.message && this.displayErrors()}
           <form onSubmit={this.handleSubmit}>
             <div className="form-group">
               <label htmlFor="exampleInputEmail1">Email address</label>
