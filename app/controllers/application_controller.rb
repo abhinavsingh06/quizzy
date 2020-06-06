@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  helper_method :logged_in?, :current_user
+  helper_method :ensure_user_logged_in, :logged_in?, :current_user
 
   private
   def ensure_user_logged_in
