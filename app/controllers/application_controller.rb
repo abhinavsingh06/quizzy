@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   helper_method :ensure_user_logged_in, :logged_in?, :current_user
 
   private
-  def ensure_user_logged_in
+  def ensure_user_not_logged_in
     unless logged_in?
       respond_to do |format|
         format.html do
@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def user_authenticated
+  def ensure_user_logged_in
     if logged_in?
       return redirect_to quizzes_path
     end
