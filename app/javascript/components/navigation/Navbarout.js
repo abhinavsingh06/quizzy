@@ -31,13 +31,13 @@ class Navbarout extends React.Component {
     const { user } = this.props;
     return (
       <div>
-        <nav className="navbar navbar-dark bg-primary">
-          <a className="navbar-brand">Quizzy</a>
-          <div className="nav justify-content-end">
+        <nav className="navbar navbar-dark p-3 mb-2 bg-dark text-white">
+          <a className="navbar-brand ml-5">Quizzy</a>
+          <div className="nav justify-content-end mr-5">
             <a className="navbar-brand">{user.first_name}</a>
             <li
               type="submit"
-              className="navbar-brand"
+              className="navbar-brand text-danger"
               onClick={this.handleLogout}>
               Logout
             </li>
