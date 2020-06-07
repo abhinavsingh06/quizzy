@@ -34,6 +34,7 @@ class Navbarout extends React.Component {
         <nav className="navbar navbar-dark p-3 mb-2 bg-dark text-white">
           <a className="navbar-brand ml-5">Quizzy</a>
           <div className="nav justify-content-end mr-5">
+            <a className="navbar-brand">Reports</a>
             <a className="navbar-brand">{user.first_name}</a>
             <li
               type="submit"

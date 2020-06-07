@@ -4,7 +4,11 @@ class New extends React.Component {
   render() {
     return (
       <>
-        <h1>hello</h1>
+        <div className="text-right">
+          <button type="button" class="btn btn-primary btn-lg">
+            Add new quiz
+          </button>
+        </div>
       </>
     );
   }
