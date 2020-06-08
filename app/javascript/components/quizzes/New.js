@@ -26,7 +26,6 @@ class New extends React.Component {
 
   displayErrors = () => {
     const { message, type } = this.state.alert;
-
     return (
       <div className="row">
         <div className="mt-4">
@@ -59,7 +58,9 @@ class New extends React.Component {
   render() {
     return (
       <>
-        <div>
+        <div className="container mt-5">
+          {this.state.alert.message && this.displayErrors()}
+          <h1 className="mb-5">Add new quiz</h1>
           <form
             className="needs-validation"
             noValidate
