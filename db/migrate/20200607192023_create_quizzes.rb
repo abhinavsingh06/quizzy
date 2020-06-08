@@ -5,6 +5,6 @@ class CreateQuizzes < ActiveRecord::Migration[6.0]
 
       t.timestamps
     end
-    add_reference :quizzes, :users, null: false, foreign_key: {on_delete: :restrict}
+    add_reference :quizzes, :user, null: false, foreign_key: {on_delete: :restrict}
   end
 end
