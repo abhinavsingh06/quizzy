@@ -3,7 +3,7 @@ require 'test_helper'
 class QuizzesControllerTest < ActionDispatch::IntegrationTest
 
   def setup
-    @user = User.create(first_name: "Sam", last_name: "Smith" , email: "sam@example.com", password: "welcome", role: 1)
+    @user = User.create!(first_name: "Sam", last_name: "Smith" , email: "sam@example.com", password: "welcome", role: 1)
     log_in_as(@user)
   end
 

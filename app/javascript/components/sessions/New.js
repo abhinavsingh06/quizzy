@@ -59,7 +59,7 @@ class New extends React.Component {
   render() {
     return (
       <>
-        <div className="container">
+        <div className="container w-50 p-3 mt-5">
           {this.state.alert.message && this.displayErrors()}
           <form onSubmit={this.handleSubmit}>
             <div className="form-group">
