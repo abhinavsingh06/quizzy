@@ -3,8 +3,8 @@ require 'test_helper'
 class QuizTest < ActiveSupport::TestCase
 
   def setup
-    @user = User.create!(first_name: "Example", last_name: "User" , email: "user@example.com", password: "welcome", role: 0)
-    @quiz = Quiz.create!(name:"quiz", users_id: @user.id)
+    @user = User.create!(first_name: "Example", last_name: "User" , email: "user@example.com", password: "welcome", role: 1)
+    @quiz = @user.quizzes.build(name:"quiz")
   end
 
   test "should be valid" do
@@ -24,7 +24,8 @@ class QuizTest < ActiveSupport::TestCase
   end
 
   test "user id should be present" do
-    @quiz = Quiz.create!(name: "test", users_id: @user.id)
-    assert @quiz.valid?
+    @quiz = Quiz.create(name: "test")
+    assert @quiz.invalid?
+    assert_equal ["must exist"], @quiz.errors[:user]
   end
 end

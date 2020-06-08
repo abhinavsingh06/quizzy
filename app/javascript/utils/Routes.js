@@ -13,3 +13,11 @@ export function logout_path() {
 export function quizzes_path() {
   return '/quizzes';
 }
+
+export function new_quiz_path() {
+  return '/quizzes/new';
+}
+
+export function add_quiz_path() {
+  return '/quizzes';
+}
