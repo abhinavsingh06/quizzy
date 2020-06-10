@@ -21,3 +21,15 @@ export function new_quiz_path() {
 export function add_quiz_path() {
   return '/quizzes';
 }
+
+export function edit_quiz_path(id) {
+  return `/quizzes/${id}/edit`;
+}
+
+export function update_quiz_path(id) {
+  return `/quizzes/${id}`;
+}
+
+export function delete_quiz_path(id) {
+  return `/quizzes/${id}`;
+}
