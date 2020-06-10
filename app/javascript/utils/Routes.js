@@ -22,6 +22,10 @@ export function add_quiz_path() {
   return '/quizzes';
 }
 
+export function show_quiz_path(id) {
+  return `/quizzes/${id}`;
+}
+
 export function edit_quiz_path(id) {
   return `/quizzes/${id}/edit`;
 }

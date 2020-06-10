@@ -1,6 +1,6 @@
 class QuizzesController < ApplicationController
   before_action :ensure_user_not_logged_in
-  before_action :load_quiz, only: [:edit, :update, :destroy]
+  before_action :load_quiz, only: [:show, :edit, :update, :destroy]
 
   def index
     @quizzes = Quiz.all
@@ -21,6 +21,10 @@ class QuizzesController < ApplicationController
       end
       render status: :unprocessable_entity, json: { errors: @quiz.errors.full_messages }
     end
+  end
+
+  def show
+    render
   end
 
   def edit
