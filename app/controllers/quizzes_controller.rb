@@ -1,6 +1,6 @@
 class QuizzesController < ApplicationController
   before_action :ensure_user_not_logged_in
-  before_action :load_quiz, only: [:edit, :update]
+  before_action :load_quiz, only: [:edit, :update, :destroy]
 
   def index
     @quizzes = Quiz.all
@@ -32,6 +32,14 @@ class QuizzesController < ApplicationController
       render status: :ok, json: { notice: "Successfully updated quiz name." }
     else
       render status: :unprocessable_entity, json:{ errors: @task.errors.full_messages }
+    end
+  end
+
+  def destroy
+    if @quiz.destroy
+      render status: :ok, json: { notice: "Successfully deleted task." }
+    else
+      render status: :unprocessable_entity, json: { errors: @task.errors.full_messages }
     end
   end
 

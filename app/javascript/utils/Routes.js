@@ -29,3 +29,7 @@ export function edit_quiz_path(id) {
 export function update_quiz_path(id) {
   return `/quizzes/${id}`;
 }
+
+export function delete_quiz_path(id) {
+  return `/quizzes/${id}`;
+}

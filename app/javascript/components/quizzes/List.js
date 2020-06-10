@@ -1,5 +1,6 @@
 import React from 'react';
 import * as Routes from '../../utils/Routes';
+import { fetchApi } from '../../utils/API';
 import { useTable } from 'react-table';
 
 function Table({ columns, data }) {
@@ -13,6 +14,25 @@ function Table({ columns, data }) {
     columns,
     data,
   });
+
+  const handleDelete = id => {
+    let quizDelete = confirm('Are you sure you want to delete the task?');
+    if (quizDelete) {
+      fetchApi({
+        url: Routes.delete_quiz_path(id),
+        method: 'DELETE',
+        onError: response => {
+          console.log(response);
+        },
+        onSuccess: response => {
+          console.log(response);
+        },
+        successCallBack: () => {
+          window.location.replace(Routes.quizzes_path());
+        },
+      });
+    }
+  };
 
   return (
     <table {...getTableProps()} className="table table-dark">
@@ -39,8 +59,11 @@ function Table({ columns, data }) {
                 </button>
               </td>
               <td>
-                <button type="button" className="btn btn-danger">
-                  <a href={Routes.edit_quiz_path()}>Delete</a>
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={() => handleDelete(row.original.id)}>
+                  Delete
                 </button>
               </td>
             </tr>
