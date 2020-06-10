@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   helper_method :ensure_user_logged_in, :logged_in?, :current_user, :not_found, :render_404
 
   private
+  
   def ensure_user_not_logged_in
     unless logged_in?
       respond_to do |format|
