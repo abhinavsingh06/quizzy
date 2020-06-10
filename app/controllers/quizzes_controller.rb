@@ -57,4 +57,5 @@ class QuizzesController < ApplicationController
 
   def load_quiz
     @quiz = Quiz.find(params[:id]) rescue not_found
+  end
 end
