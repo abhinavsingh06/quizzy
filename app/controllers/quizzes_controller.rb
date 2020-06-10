@@ -1,5 +1,6 @@
 class QuizzesController < ApplicationController
   before_action :ensure_user_not_logged_in
+  before_action :load_quiz, only: [:edit, :update]
 
   def index
     @quizzes = Quiz.all
@@ -22,9 +23,27 @@ class QuizzesController < ApplicationController
     end
   end
 
+  def edit
+    render
+  end
+
+  def update
+    if @quiz.update(quiz_params)
+      render status: :ok, json: { notice: "Successfully updated quiz name." }
+    else
+      render status: :unprocessable_entity, json:{ errors: @task.errors.full_messages }
+    end
+  end
+
   private 
 
   def quiz_params
     params.require(:quiz).permit(:name, :user_id)
+  end
+
+  def load_quiz
+    @quiz = Quiz.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => errors
+      render json: {errors: errors}
   end
 end

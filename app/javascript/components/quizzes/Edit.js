@@ -3,7 +3,7 @@ import * as Routes from '../../utils/Routes';
 import { fetchApi } from '../../utils/API';
 import Alert from '../../shared/Alert';
 
-class New extends React.Component {
+class Edit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,8 +42,8 @@ class New extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
     fetchApi({
-      url: Routes.add_quiz_path(),
-      method: 'POST',
+      url: Routes.update_quiz_path(this.props.quiz.id),
+      method: 'PATCH',
       body: {
         quiz: this.state.quiz,
       },
@@ -56,11 +56,12 @@ class New extends React.Component {
   };
 
   render() {
+    console.log(this.props.quiz.id);
     return (
       <>
         <div className="container mt-5">
           {this.state.alert.message && this.displayErrors()}
-          <h1 className="mb-5">Add new quiz</h1>
+          <h1 className="mb-5">Update quiz name</h1>
           <form
             className="needs-validation"
             noValidate
@@ -91,4 +92,4 @@ class New extends React.Component {
   }
 }
 
-export default New;
+export default Edit;

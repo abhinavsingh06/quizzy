@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Routes from '../../utils/Routes';
 import { useTable } from 'react-table';
 
 function Table({ columns, data }) {
@@ -34,12 +35,12 @@ function Table({ columns, data }) {
               })}
               <td>
                 <button type="button" className="btn btn-warning">
-                  Edit
+                  <a href={Routes.edit_quiz_path(row.original.id)}>Edit</a>
                 </button>
               </td>
               <td>
                 <button type="button" className="btn btn-danger">
-                  Delete
+                  <a href={Routes.edit_quiz_path()}>Delete</a>
                 </button>
               </td>
             </tr>
