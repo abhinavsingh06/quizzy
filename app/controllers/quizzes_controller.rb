@@ -33,6 +33,7 @@ class QuizzesController < ApplicationController
 
   def update
     if @quiz.update(quiz_params)
+      flash[:success] = "Succesfully updated the quiz name."
       render status: :ok, json: { notice: "Successfully updated quiz name." }
     else
       render status: :unprocessable_entity, json:{ errors: @task.errors.full_messages }
@@ -41,7 +42,8 @@ class QuizzesController < ApplicationController
 
   def destroy
     if @quiz.destroy
-      render status: :ok, json: { notice: "Successfully deleted task." }
+      flash[:success] = "Succesfully deleted quiz."
+      render status: :ok, json: { notice: "Successfully deleted quiz." }
     else
       render status: :unprocessable_entity, json: { errors: @task.errors.full_messages }
     end
