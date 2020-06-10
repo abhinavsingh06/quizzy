@@ -3,7 +3,7 @@ class QuizzesController < ApplicationController
   before_action :load_quiz, only: [:show, :edit, :update, :destroy]
 
   def index
-    @quizzes = Quiz.all
+    @quizzes = current_user.quizzes
   end
 
   def new
