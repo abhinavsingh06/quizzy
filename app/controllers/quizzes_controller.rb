@@ -56,8 +56,8 @@ class QuizzesController < ApplicationController
   end
 
   def load_quiz
-    @quiz = Quiz.find(params[:id])
-    rescue ActiveRecord::RecordNotFound => errors
-      render json: {errors: errors}
+    @quiz = Quiz.find(params[:id]) rescue not_found
+    # rescue ActiveRecord::RecordNotFound => errors
+    #   render json: {errors: errors}
   end
 end

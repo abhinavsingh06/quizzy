@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  helper_method :ensure_user_logged_in, :logged_in?, :current_user
+  helper_method :ensure_user_logged_in, :logged_in?, :current_user, :not_found, :render_404
 
   private
   def ensure_user_not_logged_in
@@ -27,5 +27,15 @@ class ApplicationController < ActionController::Base
     if logged_in?
       return redirect_to quizzes_path
     end
+  end
+
+  def not_found
+    raise ActionController::RoutingError.new('Not Found')
+  rescue
+    render_404
+  end
+
+  def render_404
+    render file: "#{Rails.root}/public/404", status: :not_found
   end
 end
