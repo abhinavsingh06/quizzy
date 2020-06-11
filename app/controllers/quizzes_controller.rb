@@ -1,9 +1,9 @@
 class QuizzesController < ApplicationController
   before_action :ensure_user_not_logged_in
-  before_action :load_quiz, only: [:edit, :update, :destroy]
+  before_action :load_quiz, only: [:show, :edit, :update, :destroy]
 
   def index
-    @quizzes = Quiz.all
+    @quizzes = current_user.quizzes
   end
 
   def new
@@ -23,12 +23,17 @@ class QuizzesController < ApplicationController
     end
   end
 
+  def show
+    render
+  end
+
   def edit
     render
   end
 
   def update
     if @quiz.update(quiz_params)
+      flash[:success] = "Succesfully updated the quiz name."
       render status: :ok, json: { notice: "Successfully updated quiz name." }
     else
       render status: :unprocessable_entity, json:{ errors: @task.errors.full_messages }
@@ -37,7 +42,8 @@ class QuizzesController < ApplicationController
 
   def destroy
     if @quiz.destroy
-      render status: :ok, json: { notice: "Successfully deleted task." }
+      flash[:success] = "Succesfully deleted quiz."
+      render status: :ok, json: { notice: "Successfully deleted quiz." }
     else
       render status: :unprocessable_entity, json: { errors: @task.errors.full_messages }
     end
@@ -50,8 +56,6 @@ class QuizzesController < ApplicationController
   end
 
   def load_quiz
-    @quiz = Quiz.find(params[:id])
-    rescue ActiveRecord::RecordNotFound => errors
-      render json: {errors: errors}
+    @quiz = Quiz.find(params[:id]) rescue not_found
   end
 end
