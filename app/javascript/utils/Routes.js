@@ -37,3 +37,11 @@ export function update_quiz_path(id) {
 export function delete_quiz_path(id) {
   return `/quizzes/${id}`;
 }
+
+export function new_quiz_question_path(id) {
+  return `${id}/questions/new`;
+}
+
+export function quiz_question_path(id) {
+  return `/quizzes/${id}/questions`;
+}

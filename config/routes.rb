@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   root "quizzes#index"
   resource :sessions, only: [:new, :create, :destroy]
-  resources :quizzes
+  resources :quizzes do
+    resources :questions, only: [:new, :create]
+  end
 end
