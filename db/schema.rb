@@ -10,10 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_07_192023) do
+ActiveRecord::Schema.define(version: 2020_06_11_155442) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "question_multiple_choices", force: :cascade do |t|
+    t.jsonb "options", default: [], null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "question_id", null: false
+    t.index ["question_id"], name: "index_question_multiple_choices_on_question_id"
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.text "description", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "quiz_id", null: false
+    t.index ["quiz_id"], name: "index_questions_on_quiz_id"
+  end
 
   create_table "quizzes", force: :cascade do |t|
     t.string "name", null: false
@@ -34,5 +50,7 @@ ActiveRecord::Schema.define(version: 2020_06_07_192023) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "question_multiple_choices", "questions", on_delete: :cascade
+  add_foreign_key "questions", "quizzes", on_delete: :cascade
   add_foreign_key "quizzes", "users", on_delete: :restrict
 end

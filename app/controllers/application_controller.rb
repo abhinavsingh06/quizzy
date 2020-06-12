@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  helper_method :ensure_user_logged_in, :logged_in?, :current_user, :not_found, :render_404
+  helper_method :ensure_user_logged_in, :logged_in?, :current_user, :not_found, :render_404, :load_quiz
 
   private
   
@@ -38,5 +38,9 @@ class ApplicationController < ActionController::Base
 
   def render_404
     render file: "#{Rails.root}/public/404", status: :not_found
+  end
+
+  def load_quiz
+    @quiz = Quiz.find(params[:id]) rescue not_found
   end
 end
