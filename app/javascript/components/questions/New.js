@@ -100,9 +100,9 @@ class QuestionForm extends React.Component {
       body: {
         question: { ...this.state.question },
       },
-      // onError: response => {
-      //   console.log(response);
-      // },
+      onError: response => {
+        console.log(response);
+      },
       onSuccess: response => {
         console.log(response);
       },

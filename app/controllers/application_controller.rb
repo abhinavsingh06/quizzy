@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
     render file: "#{Rails.root}/public/404", status: :not_found
   end
 
-  def load_quiz
-    @quiz = Quiz.find(params[:id]) rescue not_found
+  def load_quiz(id = nil)
+    @quiz = current_user.quizzes.find(id)
   end
 end

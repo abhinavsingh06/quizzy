@@ -24,7 +24,8 @@ class QuizzesController < ApplicationController
   end
 
   def show
-    render
+    @questions = @quiz.questions.joins(:question_multiple_choice).eager_load(:question_multiple_choice)
+    @questions = @questions.as_json(include: { question_multiple_choice: { only: :options } })
   end
 
   def edit
