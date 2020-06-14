@@ -28,9 +28,9 @@ function Question({ idx, quiz, question }) {
         <p className="m-0 text-monospace">
           Q{idx + 1} {question.description}
         </p>
-        {/* {options.map(option => (
-          <Option option={option} />
-        ))} */}
+        {options.map((option, id) => (
+          <Option option={option} key={id} />
+        ))}
       </main>
       <footer>
         <div className="justify-content-end">
