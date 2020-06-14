@@ -53,3 +53,7 @@ export function edit_quiz_question_path(quiz_id, question_id) {
 export function update_quiz_question_path(quiz_id, question_id) {
   return `/quizzes/${quiz_id}/questions/${question_id}`;
 }
+
+export function delete_quiz_question_path(quiz_id, question_id) {
+  return `/quizzes/${quiz_id}/questions/${question_id}`;
+}
