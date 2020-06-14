@@ -2,13 +2,20 @@ import React from 'react';
 
 function Alert({ type, messages }) {
   return (
-    <React.Fragment>
-      <div className={`alert alert-${type}`}>
+    <>
+      <div className={`alert alert-dismissible fade show alert-${type}`}>
         {messages.map(message => (
           <li key={message}>{message}</li>
         ))}
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 
