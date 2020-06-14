@@ -26,7 +26,6 @@ class New extends React.Component {
 
   displayErrors = () => {
     const { message, type } = this.state.alert;
-
     return (
       <div className="row">
         <div className="mt-4">
@@ -60,7 +59,9 @@ class New extends React.Component {
     return (
       <>
         <div className="container w-50 p-3 mt-5">
-          {this.state.alert.message && this.displayErrors()}
+          <div className="d-flex justify-content-center">
+            {this.state.alert.message && this.displayErrors()}
+          </div>
           <form onSubmit={this.handleSubmit}>
             <div className="form-group">
               <label htmlFor="exampleInputEmail1">Email address</label>

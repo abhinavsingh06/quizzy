@@ -9,7 +9,7 @@ function Alert({ type, messages }) {
         ))}
         <button
           type="button"
-          class="close"
+          className="close"
           data-dismiss="alert"
           aria-label="Close">
           <span aria-hidden="true">&times;</span>
