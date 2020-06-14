@@ -23,7 +23,7 @@ class Show extends React.Component {
             </div>
           </div>
         </div>
-        <List questions={this.props.questions} />
+        <List questions={this.props.questions} quiz={this.props.quiz} />
       </>
     );
   }

@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  helper_method :ensure_user_logged_in, :logged_in?, :current_user, :not_found, :render_404, :load_quiz
+  helper_method :ensure_user_logged_in, :logged_in?, :current_user, :not_found, :render_404
 
   private
   

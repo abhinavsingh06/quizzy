@@ -41,7 +41,7 @@ class QuestionsController < ApplicationController
   private
 
   def question_params
-    params.require(:question).permit(:description, question_multiple_choice_attributes: [:options [:is_correct, :value]])
+    params.require(:question).permit(:description, question_multiple_choice_attributes: [options: [:is_correct, :value]])
   end
 
   def load_question

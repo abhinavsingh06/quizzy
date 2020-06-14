@@ -93,10 +93,16 @@ class QuestionForm extends React.Component {
   };
 
   handleSubmit = event => {
+    const { question } = this.props;
     event.preventDefault();
     fetchApi({
-      url: Routes.quiz_question_path(this.props.quiz.id),
-      method: 'POST',
+      url: question
+        ? Routes.update_quiz_question_path(
+            this.props.quiz.id,
+            this.props.question.id
+          )
+        : Routes.quiz_question_path(this.props.quiz.id),
+      method: question ? 'PUT' : 'POST',
       body: {
         question: { ...this.state.question },
       },
@@ -173,7 +179,7 @@ class QuestionForm extends React.Component {
                 <input
                   type="submit"
                   className="btn btn-primary mt-2"
-                  value={'Add Question'}
+                  value={question ? 'Update Question' : 'Add Question'}
                   onClick={this.handleSubmit}
                 />
               </form>

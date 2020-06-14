@@ -1,22 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Question from './Question';
 
-class List extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return (
-      <>
+function List({ quiz, questions }) {
+  console.log(questions);
+  return (
+    <>
+      {questions.map((question, idx) => (
         <div className="card">
           <div className="card-body">
-            <Question questions={this.props} />
+            <Question idx={idx} quiz={quiz} question={question} />
           </div>
         </div>
-      </>
-    );
-  }
+      ))}
+    </>
+  );
 }
 
 export default List;
