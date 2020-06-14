@@ -113,7 +113,7 @@ class QuestionForm extends React.Component {
         console.log(response);
       },
       successCallBack: () => {
-        window.location.href = Routes.quizzes_path();
+        window.location.href = Routes.show_quiz_path(this.props.quiz.id);
       },
     });
   };

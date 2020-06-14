@@ -17,7 +17,7 @@ function Question({ idx, quiz, question }) {
         console.log(response);
       },
       successCallBack: () => {
-        window.location.href = Routes.quizzes_path();
+        window.location.href = Routes.show_quiz_path(quiz.id);
       },
     });
   };
@@ -37,7 +37,9 @@ function Question({ idx, quiz, question }) {
           <a href={Routes.edit_quiz_question_path(quiz.id, question.id)}>
             Edit
           </a>
-          <a onClick={() => handleDelete()}>Delete</a>
+          <a onClick={() => handleDelete()} style={{ cursor: 'pointer' }}>
+            Delete
+          </a>
         </div>
       </footer>
     </div>
