@@ -34,12 +34,18 @@ function Question({ idx, quiz, question }) {
       </main>
       <footer>
         <div className="justify-content-end">
-          <a href={Routes.edit_quiz_question_path(quiz.id, question.id)}>
-            Edit
-          </a>
-          <a onClick={() => handleDelete()} style={{ cursor: 'pointer' }}>
-            Delete
-          </a>
+          <button type="button" class="btn btn-warning btn-sm mr-1">
+            <a
+              href={Routes.edit_quiz_question_path(quiz.id, question.id)}
+              style={{ color: 'white' }}>
+              Edit
+            </a>
+          </button>
+          <button type="button" class="btn btn-danger btn-sm">
+            <a onClick={() => handleDelete()} style={{ cursor: 'pointer' }}>
+              Delete
+            </a>
+          </button>
         </div>
       </footer>
     </div>
