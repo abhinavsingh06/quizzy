@@ -2,6 +2,7 @@ import React from 'react';
 import { fetchApi } from '../../utils/API';
 import * as Routes from '../../utils/Routes';
 import OptionInput from '../../shared/OptionInput';
+import Alert from '../../shared/Alert';
 
 class QuestionForm extends React.Component {
   constructor(props) {
@@ -14,8 +15,32 @@ class QuestionForm extends React.Component {
           options: [],
         },
       },
+      alert: {
+        message: null,
+        type: null,
+      },
     };
   }
+
+  updateAlert = response => {
+    this.setState({
+      alert: {
+        message: response.messages,
+        type: response.type,
+      },
+    });
+  };
+
+  displayErrors = () => {
+    const { message, type } = this.state.alert;
+    return (
+      <div className="row">
+        <div className="mt-4">
+          <Alert type={type} messages={message} />
+        </div>
+      </div>
+    );
+  };
 
   componentDidMount() {
     const { question } = this.props;
@@ -93,21 +118,23 @@ class QuestionForm extends React.Component {
   };
 
   handleSubmit = event => {
+    const { question } = this.props;
     event.preventDefault();
     fetchApi({
-      url: Routes.quiz_question_path(this.props.quiz.id),
-      method: 'POST',
+      url: question
+        ? Routes.update_quiz_question_path(
+            this.props.quiz.id,
+            this.props.question.id
+          )
+        : Routes.quiz_question_path(this.props.quiz.id),
+      method: question ? 'PUT' : 'POST',
       body: {
         question: { ...this.state.question },
       },
-      // onError: response => {
-      //   console.log(response);
-      // },
-      onSuccess: response => {
-        console.log(response);
-      },
+      onError: this.updateAlert,
+      onSuccess: this.updateAlert,
       successCallBack: () => {
-        window.location.href = Routes.quizzes_path();
+        window.location.href = Routes.show_quiz_path(this.props.quiz.id);
       },
     });
   };
@@ -122,6 +149,9 @@ class QuestionForm extends React.Component {
         <h2 className="p-2 text-center text-secondary">
           Add your question here.
         </h2>
+        <div className="d-flex justify-content-center">
+          {this.state.alert.message && this.displayErrors()}
+        </div>
         <div className="card w-75 mt-3" style={{ margin: '0 auto' }}>
           <div className="card-body">
             <div className="column">
@@ -173,7 +203,7 @@ class QuestionForm extends React.Component {
                 <input
                   type="submit"
                   className="btn btn-primary mt-2"
-                  value={'Add Question'}
+                  value={question ? 'Update Question' : 'Add Question'}
                   onClick={this.handleSubmit}
                 />
               </form>

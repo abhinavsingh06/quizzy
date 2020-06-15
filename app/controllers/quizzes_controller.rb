@@ -1,5 +1,5 @@
 class QuizzesController < ApplicationController
-  before_action :ensure_user_not_logged_in
+  before_action :ensure_user_logged_in
   before_action :load_quiz, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -24,7 +24,8 @@ class QuizzesController < ApplicationController
   end
 
   def show
-    render
+    @questions = @quiz.questions.joins(:question_multiple_choice).eager_load(:question_multiple_choice)
+    @questions = @questions.as_json(include: { question_multiple_choice: { only: :options } })
   end
 
   def edit

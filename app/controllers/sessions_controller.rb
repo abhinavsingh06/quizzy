@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-  before_action :ensure_user_logged_in, only: [:new]
+  before_action :ensure_user_not_logged_in, only: [:new]
   
   def new
     render
@@ -8,7 +8,11 @@ class SessionsController < ApplicationController
   def create
     user = User.find_by(email: params[:session][:email])
     respond_to do |format|
-      if user&.authenticate(params[:session][:password])
+      if user&.role == "regular_user"
+        format.json do
+          render status: :unauthorized, json: { errors: ['Unauthorized user!'] }
+        end
+      elsif user&.authenticate(params[:session][:password])
         session[:user_id] = user.id.to_s
         format.html do
           flash[:success] = 'Successfully logged in!'
