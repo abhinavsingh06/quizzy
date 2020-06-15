@@ -3,4 +3,16 @@ class Quiz < ApplicationRecord
   has_many :questions, dependent: :destroy
   validates :name, presence: true, length: { minimum: 4 }
   validates :slug, uniqueness: true
+
+  private
+
+  def generate_slug
+    temp = slug = self.slug = ActiveSupport::Inflector.parameterize(self.name)
+    count = 0
+    while Quiz.exists?(slug: slug)
+      count += 1
+      slug = self.slug = "#{temp}-#{count}"
+    end
+    slug
+  end
 end
