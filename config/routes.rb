@@ -10,4 +10,8 @@ Rails.application.routes.draw do
   resource :quizzes, only: [] do
     resources :publish, controller: 'quizzes/publish', only: :update
   end
+
+  resources :quizzes, only: [], param: :slug, path: :public do
+    resources :attempts, controller: 'quizzes/attempts', only: [:new]
+  end
 end
