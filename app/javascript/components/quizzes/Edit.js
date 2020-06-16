@@ -56,7 +56,6 @@ class Edit extends React.Component {
   };
 
   render() {
-    console.log(this.props.quiz.id);
     return (
       <>
         <div className="container mt-5">

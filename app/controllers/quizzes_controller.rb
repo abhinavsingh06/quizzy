@@ -34,6 +34,10 @@ class QuizzesController < ApplicationController
 
   def update
     if @quiz.update(quiz_params)
+      if @quiz.slug
+        @quiz.generate_slug
+        @quiz.save!
+      end
       flash[:success] = "Succesfully updated the quiz name."
       render status: :ok, json: { notice: "Successfully updated quiz name." }
     else
