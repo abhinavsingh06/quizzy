@@ -34,10 +34,14 @@ class QuizzesController < ApplicationController
 
   def update
     if @quiz.update(quiz_params)
+      if @quiz.slug
+        @quiz.generate_slug
+        @quiz.save!
+      end
       flash[:success] = "Succesfully updated the quiz name."
       render status: :ok, json: { notice: "Successfully updated quiz name." }
     else
-      render status: :unprocessable_entity, json:{ errors: @task.errors.full_messages }
+      render status: :unprocessable_entity, json:{ errors: @quiz.errors.full_messages }
     end
   end
 
@@ -46,14 +50,14 @@ class QuizzesController < ApplicationController
       flash[:success] = "Succesfully deleted quiz."
       render status: :ok, json: { notice: "Successfully deleted quiz." }
     else
-      render status: :unprocessable_entity, json: { errors: @task.errors.full_messages }
+      render status: :unprocessable_entity, json: { errors: @quiz.errors.full_messages }
     end
   end
 
   private 
 
   def quiz_params
-    params.require(:quiz).permit(:name, :user_id)
+    params.require(:quiz).permit(:name)
   end
 
   def load_quiz

@@ -28,7 +28,7 @@ def delete_all_records_from_all_tables
 
   ApplicationRecord.descendants.each do |klass|
     klass.reset_column_information
-    klass.delete_all
+    klass.destroy_all
   end
 end
 

@@ -39,7 +39,7 @@ export function delete_quiz_path(id) {
 }
 
 export function new_quiz_question_path(id) {
-  return `${id}/questions/new`;
+  return `/quizzes/${id}/questions/new`;
 }
 
 export function quiz_question_path(id) {
@@ -56,4 +56,12 @@ export function update_quiz_question_path(quiz_id, question_id) {
 
 export function delete_quiz_question_path(quiz_id, question_id) {
   return `/quizzes/${quiz_id}/questions/${question_id}`;
+}
+
+export function quizzes_publish_path(id) {
+  return `/quizzes/publish/${id}`;
+}
+
+export function new_quiz_attempt_path(slug) {
+  return `/public/${slug}/attempts/new`;
 }
