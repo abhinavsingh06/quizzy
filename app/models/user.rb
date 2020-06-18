@@ -1,6 +1,7 @@
 class User < ApplicationRecord
 
   has_many :quizzes, dependent: :restrict_with_error
+  has_many :attempts
   before_save { email.downcase! }
   enum role: [:regular_user, :administrator]
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
