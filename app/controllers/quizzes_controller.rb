@@ -37,6 +37,8 @@ class QuizzesController < ApplicationController
       if @quiz.slug
         @quiz.generate_slug
         @quiz.save!
+      else
+        render status: :unprocessable_entity, json: { errors: ["Failed to publish URL!"] }
       end
       flash[:success] = "Succesfully updated the quiz name."
       render status: :ok, json: { notice: "Successfully updated quiz name." }

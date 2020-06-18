@@ -37,7 +37,7 @@ class Show extends React.Component {
       <button type="button" className="btn btn-success mr-1">
         <a
           style={{ color: 'white' }}
-          href={Routes.new_quiz_attempt_path(this.state.slug)}>
+          href={Routes.new_attempt_path(this.state.slug)}>
           Published
         </a>
       </button>
@@ -73,9 +73,9 @@ class Show extends React.Component {
         {this.props.quiz.slug ? (
           <div className="alert alert-dark mt-3" role="alert">
             This quiz is published here{' '}
-            <a href={Routes.new_quiz_attempt_path(this.props.quiz.slug)}>
+            <a href={Routes.new_attempt_path(this.props.quiz.slug)}>
               {window.location.origin +
-                Routes.new_quiz_attempt_path(this.props.quiz.slug)}
+                Routes.new_attempt_path(this.props.quiz.slug)}
             </a>
           </div>
         ) : (

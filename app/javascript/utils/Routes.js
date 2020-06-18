@@ -62,6 +62,6 @@ export function quizzes_publish_path(id) {
   return `/quizzes/publish/${id}`;
 }
 
-export function new_quiz_attempt_path(slug) {
+export function new_attempt_path(slug) {
   return `/public/${slug}/attempts/new`;
 }
