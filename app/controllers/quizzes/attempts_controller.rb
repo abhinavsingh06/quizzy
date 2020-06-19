@@ -20,6 +20,10 @@ class Quizzes::AttemptsController < ApplicationController
     render status: :ok, json: { success: true, attempt_id: response.attempt.id }
   end
 
+  def show
+    @attempt = @attempt.as_json(include: :attempt_answers)
+  end
+
   def edit
     render
   end
@@ -33,10 +37,6 @@ class Quizzes::AttemptsController < ApplicationController
       end
       render status: :unprocessable_entity, json: { success: false, flash: flash }
     end
-  end
-
-  def show
-    @attempt = @attempt.as_json(include: :attempt_answers)
   end
 
   private

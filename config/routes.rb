@@ -12,6 +12,6 @@ Rails.application.routes.draw do
   end
 
   resources :quizzes, only: [], param: :slug, path: :public do
-    resources :attempts, controller: 'quizzes/attempts', only: [:new]
+    resources :attempts, controller: 'quizzes/attempts', only: [:new, :create, :show, :edit, :update]
   end
 end
