@@ -3,6 +3,9 @@ class Quizzes::AttemptsController < ApplicationController
 
   skip_before_action :ensure_user_logged_in, :raise => false
   before_action :load_quiz
+  before_action :load_questions_with_options, only: [:edit, :update, :show]
+  before_action :ensure_participant_logged_in, only: [:edit, :update, :show]
+  before_action :ensure_quiz_not_attempted, only: [:edit, :update]
 
   def new
     render
@@ -14,10 +17,10 @@ class Quizzes::AttemptsController < ApplicationController
       response.errors.each do |message|
         flash.now[:danger] ||= message
       end
-      return render status: :unprocessable_entity, json: { success: false, flash: flash }
+      return render status: :unprocessable_entity, json: { errors: flash }
     end
     session[:attempt_id] = response.attempt.id.to_s
-    render status: :ok, json: { success: true, attempt_id: response.attempt.id }
+    render status: :ok, json: { notice:"You can now attempt the quiz!", attempt_id: response.attempt.id }
   end
 
   def show
@@ -30,12 +33,12 @@ class Quizzes::AttemptsController < ApplicationController
 
   def update
     if @attempt.update(attempt_attributes)
-      render status: :ok, json: { success: true, notice: "Thank you for taking the quiz!" }
+      render status: :ok, json: { notice: "Thank you for taking the quiz!" }
     else
       @attempt.errors.full_messages.each do |message|
         flash.now[:danger] ||= message
       end
-      render status: :unprocessable_entity, json: { success: false, flash: flash }
+      render status: :unprocessable_entity, json: { errors: flash }
     end
   end
 
