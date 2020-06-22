@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_19_161730) do
+ActiveRecord::Schema.define(version: 2020_06_22_111344) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,7 +21,6 @@ ActiveRecord::Schema.define(version: 2020_06_19_161730) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "question_id", null: false
     t.bigint "attempt_id", null: false
-    t.index ["attempt_id"], name: "index_attempt_answers_on_attempt_id"
     t.index ["question_id", "attempt_id"], name: "index_attempt_answers_on_question_id_and_attempt_id", unique: true
     t.index ["question_id"], name: "index_attempt_answers_on_question_id"
   end
@@ -36,7 +35,6 @@ ActiveRecord::Schema.define(version: 2020_06_19_161730) do
     t.integer "incorrect_answers_count", default: 0, null: false
     t.index ["quiz_id"], name: "index_attempts_on_quiz_id"
     t.index ["user_id", "quiz_id"], name: "index_attempts_on_user_id_and_quiz_id", unique: true
-    t.index ["user_id"], name: "index_attempts_on_user_id"
   end
 
   create_table "question_multiple_choices", force: :cascade do |t|
