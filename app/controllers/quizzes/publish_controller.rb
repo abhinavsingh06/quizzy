@@ -8,7 +8,6 @@ class Quizzes::PublishController < ApplicationController
       flash.now[:success] = "Successfully published the quiz!"
       render status: :ok, json: { notice: flash, slug: @quiz.slug }
     end
-    render status: :unprocessable_entity, json: { errors: ["Failed to publish URL!"] }
   end
 
   private
