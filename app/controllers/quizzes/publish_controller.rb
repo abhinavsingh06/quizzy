@@ -15,7 +15,7 @@ class Quizzes::PublishController < ApplicationController
   def quiz_has_questions?
     if @quiz.questions.empty?
       flash.now[:danger] = "Please add questions!"
-      render status: :unprocessable_entity, json: { success: false, errors: flash }
+      render status: :unprocessable_entity, json: { errors: flash }
     end
   end
 end

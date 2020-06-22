@@ -62,6 +62,22 @@ export function quizzes_publish_path(id) {
   return `/quizzes/publish/${id}`;
 }
 
-export function new_quiz_attempt_path(slug) {
+export function new_attempt_path(slug) {
   return `/public/${slug}/attempts/new`;
+}
+
+export function attempt_path(slug) {
+  return `/public/${slug}/attempts`;
+}
+
+export function edit_attempt_path(slug, id) {
+  return `/public/${slug}/attempts/${id}/edit`;
+}
+
+export function show_attempt_path(slug, id) {
+  return `/public/${slug}/attempts/${id}`;
+}
+
+export function update_attempt_path(slug, id) {
+  return `/public/${slug}/attempts/${id}`;
 }
