@@ -3,8 +3,8 @@ class Quizzes::AttemptsController < ApplicationController
 
   skip_before_action :ensure_user_logged_in, :raise => false
   before_action :load_quiz
-  before_action :load_questions_with_options, only: [:edit, :update, :show]
-  before_action :ensure_participant_logged_in, only: [:edit, :update, :show]
+  before_action :load_questions_with_options, only: [:show, :edit, :update]
+  before_action :ensure_participant_logged_in, only: [:show, :edit, :update]
   before_action :ensure_quiz_not_attempted, only: [:edit, :update]
 
   def new

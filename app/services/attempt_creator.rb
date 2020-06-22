@@ -11,7 +11,6 @@ class AttemptCreator < ApplicationService
       ActiveRecord::Base.transaction do
         @participant = User.where(email: @participant_attributes[:email]).first_or_initialize(@participant_attributes.except(:email))
         @participant.save!
-
         @attempt = @participant.attempts.where(quiz_id: @quiz).first_or_initialize
         @attempt.save!
       end

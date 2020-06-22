@@ -11,20 +11,32 @@ function CorrectOption() {
   );
 }
 
-function Option({ option }) {
+function Option({
+  number,
+  option,
+  question,
+  handleAnswer,
+  submitted,
+  selectedAnswer,
+}) {
   return (
     <div
       className={`${
-        option.is_correct ? 'border rounded border-success' : ''
+        option.is_correct && submitted ? 'border rounded border-success' : ''
       } input-group mt-1`}>
       <div className="input-group-prepend">
         <div className="input-group-text">
           <input
             type="radio"
             className="option-select"
-            defaultChecked={option.is_correct}
+            defaultChecked={
+              question ? selectedAnswer == option.value : option.is_correct
+            }
             defaultValue={option.value}
-            disabled
+            name={question ? `${question - 1}-option` : ''}
+            data-id={handleAnswer ? number : null}
+            onClick={handleAnswer ? handleAnswer : null}
+            disabled={submitted ? true : question ? false : true}
           />
         </div>
       </div>
@@ -35,7 +47,7 @@ function Option({ option }) {
         value={option.value}
         disabled
       />
-      {option.is_correct ? <CorrectOption /> : ''}
+      {question && !submitted ? '' : option.is_correct ? <CorrectOption /> : ''}
     </div>
   );
 }

@@ -49,17 +49,21 @@ export class New extends Component {
   };
 
   handleSubmit = event => {
+    const { quiz } = this.props;
     event.preventDefault();
     fetchApi({
-      url: Routes.attempt_path(this.props.quiz.slug),
+      url: Routes.attempt_path(quiz.slug),
       method: 'POST',
       body: {
         attempt: this.state.attempt,
       },
       onError: this.updateAlert,
       onSuccess: this.updateAlert,
-      successCallBack: () => {
-        window.location.href = Routes.quizzes_path();
+      successCallBack: response => {
+        window.location.href = Routes.edit_attempt_path(
+          quiz.slug,
+          response.attempt_id
+        );
       },
     });
   };
