@@ -38,7 +38,7 @@ class Quizzes::AttemptsController < ApplicationController
       @attempt.errors.full_messages.each do |message|
         flash.now[:danger] ||= message
       end
-      render status: :unprocessable_entity, json: { errors: flash }
+      render status: :unprocessable_entity, json: { errors: @attempt.errors.full_messages }
     end
   end
 
