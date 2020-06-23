@@ -43,4 +43,16 @@ class ApplicationController < ActionController::Base
   def load_quiz(id = nil)
     @quiz = current_user.quizzes.find(id)
   end
+
+  def ensure_user_admin
+    unless current_user.role == "administrator"
+      respond_to do |format|
+        format.html do
+          flash[:danger] = "Please Log In"
+          redirect_to login_path
+        end
+        format.json { render status: :unauthorized, json: { errors: "You need to login" } }
+      end
+    end
+  end
 end

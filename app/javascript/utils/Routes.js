@@ -81,3 +81,7 @@ export function show_attempt_path(slug, id) {
 export function update_attempt_path(slug, id) {
   return `/public/${slug}/attempts/${id}`;
 }
+
+export function reports_path() {
+  return `/reports`;
+}
