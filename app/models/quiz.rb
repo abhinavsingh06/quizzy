@@ -5,6 +5,7 @@ class Quiz < ApplicationRecord
   has_many :submitted_attempts, -> { where(submitted: true) }, class_name: 'Attempt'
   validates :name, presence: true, length: { minimum: 4 }
   validates :slug, uniqueness: true, :allow_nil => true
+  scope :published, -> { where.not(slug: nil) }
 
   def generate_slug
     temp = slug = self.slug = ActiveSupport::Inflector.parameterize(self.name)
