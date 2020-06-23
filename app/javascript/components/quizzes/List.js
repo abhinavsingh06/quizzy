@@ -33,7 +33,7 @@ function Table({ columns, data }) {
       });
     }
   };
-  console.log(data);
+
   return (
     <table {...getTableProps()} className="table table-dark">
       <thead>
