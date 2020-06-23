@@ -14,4 +14,6 @@ Rails.application.routes.draw do
   resources :quizzes, only: [], param: :slug, path: :public do
     resources :attempts, controller: 'quizzes/attempts', only: [:new, :create, :show, :edit, :update]
   end
+
+  resource :reports, only: :show
 end

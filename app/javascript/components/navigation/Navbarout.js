@@ -41,7 +41,9 @@ class Navbarout extends React.Component {
             <a className="navbar-brand">
               {user.first_name} {user.last_name}
             </a>
-            <a className="navbar-brand">Reports</a>
+            <a className="navbar-brand" href={Routes.reports_path()}>
+              Reports
+            </a>
             <li
               type="submit"
               className="navbar-brand text-danger"

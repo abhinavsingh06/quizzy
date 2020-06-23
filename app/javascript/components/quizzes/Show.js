@@ -81,7 +81,13 @@ class Show extends React.Component {
         ) : (
           ''
         )}
-        <List questions={this.props.questions} quiz={this.props.quiz} />
+        {this.props.questions.length ? (
+          <List questions={this.props.questions} quiz={this.props.quiz} />
+        ) : (
+          <h3 className="text-center m-3">
+            No questions are present at the moment!
+          </h3>
+        )}
       </>
     );
   }
