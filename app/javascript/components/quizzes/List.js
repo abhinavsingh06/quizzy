@@ -33,7 +33,7 @@ function Table({ columns, data }) {
       });
     }
   };
-
+  console.log(data);
   return (
     <table {...getTableProps()} className="table table-dark">
       <thead>
@@ -45,37 +45,41 @@ function Table({ columns, data }) {
           </tr>
         ))}
       </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row, i) => {
-          prepareRow(row);
-          return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map(cell => {
-                return (
-                  <td {...cell.getCellProps()}>
-                    <a href={Routes.show_quiz_path(row.original.id)}>
-                      {cell.render('Cell')}
-                    </a>
-                  </td>
-                );
-              })}
-              <td>
-                <button type="button" className="btn btn-warning">
-                  <a href={Routes.edit_quiz_path(row.original.id)}>Edit</a>
-                </button>
-              </td>
-              <td>
-                <button
-                  type="button"
-                  className="btn btn-danger"
-                  onClick={() => handleDelete(row.original.id)}>
-                  Delete
-                </button>
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
+      {data.length ? (
+        <tbody {...getTableBodyProps()}>
+          {rows.map((row, i) => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map(cell => {
+                  return (
+                    <td {...cell.getCellProps()}>
+                      <a href={Routes.show_quiz_path(row.original.id)}>
+                        {cell.render('Cell')}
+                      </a>
+                    </td>
+                  );
+                })}
+                <td>
+                  <button type="button" className="btn btn-warning">
+                    <a href={Routes.edit_quiz_path(row.original.id)}>Edit</a>
+                  </button>
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={() => handleDelete(row.original.id)}>
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      ) : (
+        <h4 className="text-center">No quiz is present at the moment!</h4>
+      )}
     </table>
   );
 }
