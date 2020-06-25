@@ -9,5 +9,6 @@ class CreateReportService < ApplicationService
   def call
     current_user = User.find(@user_id)
     quizzes = current_user.quizzes.published.eager_load(submitted_attempts: :user)
+    file_name = Time.now.strftime("%Y-%m-%d_%H-%M-%S") + "_report.csv"
   end
 end
