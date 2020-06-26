@@ -1,0 +1,7 @@
+<%- headers = ["Quiz name", "User name", "Email", "Correct answers", "Incorrect answers"] -%>
+<%= CSV.generate_line headers %>
+<%- @quizzes.each do |quiz| -%>
+  <%- quiz.submitted_attempts.each do |attempt| -%>
+    <%= CSV.generate_line([quiz.name, "#{attempt.user.first_name} #{attempt.user.last_name}", attempt.user.email, attempt.correct_answers_count, attempt.incorrect_answers_count]) -%>
+  <%- end -%>  
+<%- end -%>

@@ -15,5 +15,5 @@ Rails.application.routes.draw do
     resources :attempts, controller: 'quizzes/attempts', only: [:new, :create, :show, :edit, :update]
   end
 
-  resource :reports, only: :show
+  resource :reports, only: [:create, :show]
 end
