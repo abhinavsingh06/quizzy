@@ -166,7 +166,6 @@ class AttemptReport extends React.Component {
     await fetchApi({
       url: Routes.reports_path(),
       method: 'POST',
-      body: { ...this.state },
       onError: response => {
         console.log(response);
       },
