@@ -188,7 +188,6 @@ class AttemptReport extends React.Component {
       let csv = await pollForCsv.text();
       this.setState({ loading: false, csvData: csv }, () => {
         $('#report-modal').modal('toggle');
-        console.log(this.state);
       });
     }
   };

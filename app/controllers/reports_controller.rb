@@ -2,8 +2,8 @@ class ReportsController < ApplicationController
   before_action :ensure_user_admin
 
   def create
-    jid = CreateReportWorker.perform_async(current_user.id)
-    render status: :ok, json: { processing: true, notice: "Processing", job_id: jid }
+    job_id = CreateReportWorker.perform_async(current_user.id)
+    render status: :ok, json: { processing: true, notice: "Processing", job_id: job_id }
   end
   
   def show
@@ -11,8 +11,8 @@ class ReportsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv do
-        if params[:jid]
-          current_job = current_user.jobs.find_by(job_id: params[:jid])
+        if params[:job_id]
+          current_job = current_user.jobs.find_by(job_id: params[:job_id])
           if current_job && current_job[:status] == "done"
             return send_file current_job.filename, type: "application/csv"
           end
