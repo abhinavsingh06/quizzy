@@ -66,8 +66,8 @@ class PriceCalculator
     billing_items.each do |item, value|
       puts "#{item.ljust(10)} #{value['units']}           $#{value['price']}"
     end
-    puts "Total price : #{total_price.round(3)}"
-    puts "You saved #{(actual_price - total_price).round(3)} today."
+    puts "Total price : $#{total_price.round(3)}"
+    puts "You saved $#{(actual_price - total_price).round(3)} today."
   end
 end
 
@@ -76,8 +76,10 @@ begin
   Items.new('bread', 2.17)
   Items.new('banana', 0.99)
   Items.new('apple', 0.89)
+
   SaleItems.new('milk',2,5.00)
   SaleItems.new('bread',3,6.00)
+  
   price_calculator = PriceCalculator.new
   puts price_calculator.generate_bill
 end
