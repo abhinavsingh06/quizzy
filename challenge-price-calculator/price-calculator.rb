@@ -26,6 +26,10 @@ class PriceCalculator
     response = gets.chomp
   end
   
+  def calculate_bill(quantity)
+    quantity.map { |item,value| [item, SalesItems.all[item].nil? ? quantity[item]*Items.all[item] : (((quantity[item]/SaleItems.all[item]['units']).floor)*SaleItems.all[item]['price']) + ((quantity[item]%SaleItems.all[item]['units'])*Items.all[item])] }.to_h
+  end
+  
   def display_bill
     puts "Item     Quantity      Price"
     puts "--------------------------------------"
