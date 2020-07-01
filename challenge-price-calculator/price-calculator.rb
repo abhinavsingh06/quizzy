@@ -27,10 +27,11 @@ class PriceCalculator
     if purchased_items.empty?
       puts "First add items to generate bill"
     else 
+      quantity = count_items
       price = calculate_bill(quantity)
-      billing_items = quantity.each_with_object(price) { |(key,value), billing_items| 
+      billing_items = quantity.each_with_object(price) do |(key,value), billing_items| 
         billing_items[key] = {'units' => value, 'price' => price[key]} 
-      }
+      end
       display_bill(billing_items, quantity)
     end
   end
@@ -38,6 +39,13 @@ class PriceCalculator
   def get_input
     puts "Please enter all the items purchased separated by a comma"
     response = gets.chomp
+  end
+
+  def count_items
+    @purchased_items.inject(Hash.new(0)) do |quantity, item|
+      quantity[item] += 1
+      quantity
+    end
   end
   
   def calculate_bill(quantity)
