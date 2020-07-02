@@ -64,7 +64,7 @@ class PriceCalculator
     puts "Item     Quantity      Price"
     puts "--------------------------------------"
     billing_items.each do |item, value|
-      puts "#{item.ljust(10)} #{value['units']}           $#{value['price']}"
+      puts "#{item.ljust(10)} #{value['units']}           $#{value['price'].round(3)}"
     end
     puts "Total price : $#{total_price.round(3)}"
     puts "You saved $#{(actual_price - total_price).round(3)} today."
