@@ -19,9 +19,9 @@ module Shop
     end
   end
 
-  class BundleDiscount
-    def initialize(*bundle_discounts)
-      @all = Array(bundle_discounts)
+  class Discount
+    def initialize(*discounts)
+      @all = Array(discounts)
     end
     
     def find(item:, quantity:)
@@ -31,26 +31,26 @@ module Shop
       .find { |discount| discount.item_name == item.name && discount.size <= quantity }
     end
     
-    ItemBundleDiscount = Struct.new(:item_name, :size, :bundle_price, keyword_init: true) do
+    ItemDiscount = Struct.new(:item_name, :size, :price, keyword_init: true) do
       def sum_with_applied_discount(item_price, item_quantity)
-        ((item_quantity / size) * bundle_price) + ((item_quantity % size) * item_price)
+        ((item_quantity / size) * price) + ((item_quantity % size) * item_price)
       end
     end
 
-    def self.with(*bundle_discount_attrs)
+    def self.with(*discount_attrs)
       new(
-        *bundle_discount_attrs.map { |attrs| ItemBundleDiscount.new(**attrs) }
+        *discount_attrs.map { |attrs| ItemDiscount.new(**attrs) }
       )
     end
   end
 end
 
 class Order
-  attr_reader :bundle_discounts
+  attr_reader :discounts
 
-  def initialize(items:, bundle_discounts:)
+  def initialize(items:, discounts:)
     @items = items
-    @bundle_discounts = bundle_discounts
+    @discounts = discounts
   end
 
   def items
@@ -62,7 +62,7 @@ class Order
           name: item.name,
           price: item.price,
           quantity: items.size,
-          bundle_discount: bundle_discounts.find(item: item, quantity: items.size)
+          discount: discounts.find(item: item, quantity: items.size)
         )
       }
   end
@@ -85,10 +85,10 @@ class Order
 
   private
 
-  OrderItem = Struct.new(:name, :price, :quantity, :bundle_discount, keyword_init: true) do
+  OrderItem = Struct.new(:name, :price, :quantity, :discount, keyword_init: true) do
     def sum
-      if bundle_discount
-        bundle_discount.sum_with_applied_discount(price, quantity)
+      if discount
+        discount.sum_with_applied_discount(price, quantity)
       else
         gross_sum
       end
@@ -156,9 +156,9 @@ end
 
 # The PurchaseProcess is responsible for gathering and responding to user input
 class PurchaseProcess
-  def initialize(stock:, bundle_discounts:)
+  def initialize(stock:, discounts:)
     @stock = stock
-    @bundle_discounts = bundle_discounts
+    @discounts = discounts
   end
 
   def initiate
@@ -180,7 +180,7 @@ class PurchaseProcess
     item_names = gets.chomp.split(",").map(&:strip).compact
     items = item_names.map { |name| stock.retreive(name) }.compact
 
-    Order.new(items: items, bundle_discounts: bundle_discounts)
+    Order.new(items: items, discounts: discounts)
   end
 
   def receive_customer_order_confirmation(order)
@@ -194,7 +194,7 @@ class PurchaseProcess
 
   private
 
-  attr_reader :stock, :bundle_discounts
+  attr_reader :stock, :discounts
 end
 
 # The ”main” part of the program, setup the inventory and run the process
@@ -206,9 +206,9 @@ purchase =
       {name: 'banana', price: 0.99},
       {name: 'apple', price: 0.89}
     ),
-    bundle_discounts: Shop::BundleDiscount.with(
-      {item_name: 'milk', size: 2, bundle_price: 5.00},
-      {item_name: 'bread', size: 3, bundle_price: 6.00}
+    discounts: Shop::Discount.with(
+      {item_name: 'milk', size: 2, price: 5.00},
+      {item_name: 'bread', size: 3, price: 6.00}
     )
   )
 
