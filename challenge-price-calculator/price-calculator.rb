@@ -1,215 +1,89 @@
-module Shop
-  class Stock
-    attr_reader :items
-
-    def initialize(*items)
-      @items = Array(items)
-    end
-    
-    def retreive(name)
-      items.find { |item| item.name == name }
-    end
-    
-    StockItem = Struct.new(:name, :price, keyword_init: true)
-
-    def self.with(*item_attributes)
-      new(
-        *item_attributes.map { |attrs| StockItem.new(**attrs) }
-      )
-    end
+module Inventory
+  def item_unit_price(item)
+    { milk: 3.97, bread: 2.17, banana: 0.99, apple: 0.89 }[item.to_sym]
   end
-
-  class Discount
-    def initialize(*discounts)
-      @all = Array(discounts)
-    end
-    
-    def find(item:, quantity:)
-      @all
-      .sort_by(&:size)
-      .reverse
-      .find { |discount| discount.item_name == item.name && discount.size <= quantity }
-    end
-    
-    ItemDiscount = Struct.new(:item_name, :size, :price, keyword_init: true) do
-      def sum_with_applied_discount(item_price, item_quantity)
-        ((item_quantity / size) * price) + ((item_quantity % size) * item_price)
-      end
-    end
-
-    def self.with(*discount_attrs)
-      new(
-        *discount_attrs.map { |attrs| ItemDiscount.new(**attrs) }
-      )
-    end
+ 
+  def sale_on_items(item)
+    { milk: { price: 5.00, quantity: 2 }, bread: { price: 6.00, quantity: 3 } }[item.to_sym]
   end
 end
-
-class Order
-  attr_reader :discounts
-
-  def initialize(items:, discounts:)
-    @items = items
-    @discounts = discounts
+ 
+class PurchaseOrder
+  include Inventory
+  attr_reader :quantity, :product_price
+  def initialize
+    @quantity = {}
+    @product_price = {}
   end
-
-  def items
-    @items
-      .group_by(&:name)
-      .map { |name, items|
-        item = items.first
-        OrderItem.new(
-          name: item.name,
-          price: item.price,
-          quantity: items.size,
-          discount: discounts.find(item: item, quantity: items.size)
-        )
-      }
-  end
-
-  def empty?
-    @items.empty?
-  end
-
-  def gross_sum
-    items.sum(&:gross_sum)
-  end
-
-  def sum
-    items.sum(&:sum)
-  end
-
-  def total_discount
-    gross_sum - sum
-  end
-
-  private
-
-  OrderItem = Struct.new(:name, :price, :quantity, :discount, keyword_init: true) do
-    def sum
-      if discount
-        discount.sum_with_applied_discount(price, quantity)
-      else
-        gross_sum
-      end
-    end
-
-    def gross_sum
-      price * quantity
+ 
+  protected
+  def calculate_total_price
+    @quantity.inject(0) do |total, (item_name, item)|
+      total + calculate_price(item_name)
     end
   end
-end
-
-# These are responsible to display domain objects on the screen
-module Views
-  class Receipt
-    def initialize(order)
-      @order = order
-    end
-
-    def to_s
-      <<~RECEIPT
-        Item     Quantity      Price
-        --------------------------------------
-        #{line_items.join("\n")}
-        #{order_summary}
-      RECEIPT
-    end
-
-    def line_items
-      @order.items.map { |item|
-        "#{item.name.ljust(10)} #{item.quantity}           $#{item.sum.round(3)}"
-      }
-    end
-
-    def order_summary
-      <<~SUMMARY
-        Total price : $#{@order.sum.round(3)}
-        You saved $#{@order.total_discount.round(3)} today.
-      SUMMARY
+ 
+  def calculate_saved_price
+    @quantity.inject(0) do |saved, (item_name, item)|
+      saved + saved_price(item_name)
     end
   end
-
-  class OrderSummary
-    def initialize(order)
-      @order = order
-    end
-
-    def to_s
-      <<~SUMMARY
-        Order summary:
-        Item     Quantity
-        -----------------
-        #{line_items.join("\n")}
-      SUMMARY
-    end
-
-    private
-
-    def line_items
-      @order.items.map { |item|
-        "#{item.name.ljust(10)} #{item.quantity}"
-      }
+ 
+  def count_items(input)
+    @quantity = input.inject(Hash.new(0)) do |quantity, item|
+      quantity[item] += 1
+      quantity
     end
   end
-end
-
-# The PurchaseProcess is responsible for gathering and responding to user input
-class PurchaseProcess
-  def initialize(stock:, discounts:)
-    @stock = stock
-    @discounts = discounts
-  end
-
-  def initiate
-    puts "Please enter all the items purchased separated by a comma"
-    order = receive_customer_order
-
-    if order.empty?
-      "No available products chosen"
-      initiate
-    elsif receive_customer_order_confirmation(order)
-      puts Views::Receipt.new(order)
-      puts "Than you for your purchase!"
+ 
+  def calculate_price(item)
+    sale = sale_on_items(item)
+    quantity = @quantity[item]
+    price = item_unit_price(item)
+    if sale
+      sale_quantity = sale[:quantity]
+      sale_price = sale[:price]
+      @product_price[item] = ((quantity / sale_quantity) * sale_price) + ((quantity % sale_quantity) * price)
     else
-      puts "Plese come back another time!"
+      @product_price[item] = quantity * price
     end
   end
-
-  def receive_customer_order
-    item_names = gets.chomp.split(",").map(&:strip).compact
-    items = item_names.map { |name| stock.retreive(name) }.compact
-
-    Order.new(items: items, discounts: discounts)
+ 
+  def saved_price(item)
+    item_unit_price(item) * @quantity[item] - calculate_price(item)
   end
-
-  def receive_customer_order_confirmation(order)
-    puts Views::OrderSummary.new(order)
-    puts "Please confirm your order"
-    puts "y/n"
-    response = gets.chomp.downcase.strip
-
-    response == "y"
-  end
-
-  private
-
-  attr_reader :stock, :discounts
 end
-
-# The ”main” part of the program, setup the inventory and run the process
-purchase =
-  PurchaseProcess.new(
-    stock: Shop::Stock.with(
-      {name: 'milk', price: 3.97},
-      {name: 'bread', price: 2.17},
-      {name: 'banana', price: 0.99},
-      {name: 'apple', price: 0.89}
-    ),
-    discounts: Shop::Discount.with(
-      {item_name: 'milk', size: 2, price: 5.00},
-      {item_name: 'bread', size: 3, price: 6.00}
-    )
-  )
-
-purchase.initiate
+ 
+class Store < PurchaseOrder
+  def get_order
+    puts "Please enter all the items purchased separated by a comma"
+    input = gets.chomp
+    input = input.split(',').map(&:strip)
+    generate_bill(input)
+  end
+ 
+  def generate_bill(input)
+    purchase_order = PurchaseOrder.new
+    purchase_order.count_items(input)
+    total = purchase_order.calculate_total_price
+    saved = purchase_order.calculate_saved_price
+    quantity = purchase_order.quantity
+    product_price = purchase_order.product_price
+    display_bill(product_price, quantity, total, saved)
+  end
+ 
+  def display_bill(product_price, quantity, total_price, saved_price)
+    puts "Item     Quantity      Price"
+    puts "--------------------------------------"
+    quantity.each do |item, value|
+      puts "#{item.ljust(10)} #{value}           $#{product_price[item]}"
+    end
+    puts "Total price : $#{total_price.round(3)}"
+    puts "You saved $#{saved_price.round(3)} today."
+  end
+end
+ 
+begin
+  order = Store.new
+  order.get_order
+end
