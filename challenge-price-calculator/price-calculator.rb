@@ -39,9 +39,9 @@ module Store
         else
           sale = sale_on_items(item)
           if sale
-          @products[item] = Product.new(item, item_unit_price(item), sale[:price], sale[:quantity])
-        else
-          @products[item] = Product.new(item, item_unit_price(item))
+            @products[item] = Product.new(item, item_unit_price(item), sale[:price], sale[:quantity])
+          else
+            @products[item] = Product.new(item, item_unit_price(item))
           end
           @quantity[item] = 1
         end
@@ -94,7 +94,7 @@ module Store
     end
 
     private
-    
+
       def generate_bill(items)
         purchase_order = PurchaseOrder.new(items)
         quantity = purchase_order.calculate_quantity
