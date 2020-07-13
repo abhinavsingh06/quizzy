@@ -2,90 +2,121 @@ module PriceList
   def item_unit_price(item)
     { milk: 3.97, bread: 2.17, banana: 0.99, apple: 0.89 }[item.to_sym]
   end
- 
+
   def sale_on_items(item)
     { milk: { price: 5.00, quantity: 2 }, bread: { price: 6.00, quantity: 3 } }[item.to_sym]
   end
 end
 
-module Shop
+module Store
+  class Product
+    attr_reader :name, :price, :sale_price, :sale_quantity
+
+    def initialize(name, price, sale_price = nil, sale_quantity = nil)
+      @name = name
+      @price = price
+      @sale_price = sale_price
+      @sale_quantity = sale_quantity
+    end
+  end
+
   class PurchaseOrder
     include PriceList
-    attr_reader :quantity, :product_price
-    def initialize
+
+    attr_reader :product_price
+
+    def initialize(items)
+      @items = items
       @quantity = {}
+      @products = {}
       @product_price = {}
     end
-   
-    protected
+
+    def calculate_quantity
+      @items.each do |item|
+        if @products[item]
+          increment_quantity(item)
+        else
+          sale = sale_on_items(item)
+          if sale
+          @products[item] = Product.new(item, item_unit_price(item), sale[:price], sale[:quantity])
+        else
+          @products[item] = Product.new(item, item_unit_price(item))
+          end
+          @quantity[item] = 1
+        end
+      end
+      @quantity
+    end
+
     def calculate_total_price
-      @quantity.inject(0) do |total, (item_name, item)|
-        total + calculate_price(item_name)
+      @products.inject(0) do |total, (product_name, product)|
+        total + calculate_price(@products[product_name], @quantity[product_name])
       end
     end
-   
+
     def calculate_saved_price
-      @quantity.inject(0) do |saved, (item_name, item)|
-        saved + saved_price(item_name)
+      @products.inject(0) do |saved, (product_name, product)|
+        saved + saved_price(@products[product_name], @quantity[product_name])
       end
     end
-   
-    def count_items(input)
-      @quantity = input.inject(Hash.new(0)) do |quantity, item|
-        quantity[item] += 1
-        quantity
+
+    private
+
+      def increment_quantity(item)
+        @quantity[item] += 1
       end
-    end
-   
-    def calculate_price(item)
-      sale = sale_on_items(item)
-      quantity = @quantity[item]
-      price = item_unit_price(item)
-      if sale
-        sale_quantity = sale[:quantity]
-        sale_price = sale[:price]
-        @product_price[item] = ((quantity / sale_quantity) * sale_price) + ((quantity % sale_quantity) * price)
-      else
-        @product_price[item] = quantity * price
+
+      def calculate_price(product, quantity)
+        price = product.price
+        name = product.name
+        if product.sale_price
+          sale_price = product.sale_price
+          sale_quantity = product.sale_quantity
+          @product_price[name] = (quantity / sale_quantity) * sale_price + (quantity % sale_quantity) * price
+        else
+          @product_price[name] = quantity * price
+        end
       end
-    end
-   
-    def saved_price(item)
-      item_unit_price(item) * @quantity[item] - calculate_price(item)
-    end
+      
+      def saved_price(product, quantity)
+        price = product.price
+        price * quantity - calculate_price(product, quantity)
+      end
   end
   
-  class Bill < PurchaseOrder
+  class Bill
     def get_order
-      puts "Please enter all the items purchased separated by a comma"
-      input = gets.chomp
-      input = input.split(',').map(&:strip)
-      generate_bill(input)
+      puts "Please enter all the items purchased separated by a comma:"
+      response = gets.chomp
+      items = response.split(',').map(&:strip)
+      generate_bill(items)
     end
-   
-    def generate_bill(input)
-      purchase_order = PurchaseOrder.new
-      purchase_order.count_items(input)
-      total = purchase_order.calculate_total_price
-      saved = purchase_order.calculate_saved_price
-      quantity = purchase_order.quantity
-      product_price = purchase_order.product_price
-      display_bill(product_price, quantity, total, saved)
-    end
-   
-    def display_bill(product_price, quantity, total_price, saved_price)
-      puts "Item     Quantity      Price"
-      puts "--------------------------------------"
-      quantity.each do |item, value|
-        puts "#{item.ljust(10)} #{value}           $#{product_price[item]}"
+
+    private
+    
+      def generate_bill(items)
+        purchase_order = PurchaseOrder.new(items)
+        quantity = purchase_order.calculate_quantity
+        total_price = purchase_order.calculate_total_price
+        saved_price = purchase_order.calculate_saved_price
+        product_price = purchase_order.product_price
+        display_bill(product_price, quantity, total_price, saved_price)
       end
-      puts "Total price : $#{total_price.round(3)}"
-      puts "You saved $#{saved_price.round(3)} today."
-    end
+
+      def display_bill(products, quantity, total_price, saved_price)
+        puts "Item     Quantity      Price"
+        puts "--------------------------------------"
+        products.each do |item, value|
+          puts "#{item.ljust(10)} #{quantity[item]}           $#{products[item]}"
+        end
+        puts "Total price : $#{total_price.round(3)}"
+        puts "You saved $#{saved_price.round(3)} today."
+      end
   end
 end
- 
+
 begin
-  order = Shop::Bill.new
+  order = Store::Bill.new
   order.get_order
 end
