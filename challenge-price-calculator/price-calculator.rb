@@ -20,7 +20,7 @@ module Store
     end
   end
 
-  class Cart < Product
+  class Cart
     include PriceList
 
     attr_reader :products
