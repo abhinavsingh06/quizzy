@@ -20,7 +20,7 @@ module Store
     end
   end
 
-  class Cart
+  class PriceCalculator
     include PriceList
 
     attr_reader :products
@@ -96,11 +96,11 @@ module Store
     private
 
       def generate_bill(items)
-        cart = Cart.new(items)
-        products = cart.products
-        quantity = cart.calculate_quantity
-        total_price = cart.calculate_total_price
-        saved_price = cart.calculate_saved_price
+        price_calculator = PriceCalculator.new(items)
+        products = price_calculator.products
+        quantity = price_calculator.calculate_quantity
+        total_price = price_calculator.calculate_total_price
+        saved_price = price_calculator.calculate_saved_price
         display_bill(products, quantity, total_price, saved_price)
       end
 
