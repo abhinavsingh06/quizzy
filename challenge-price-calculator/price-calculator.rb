@@ -3,7 +3,7 @@ module PriceList
     { milk: 3.97, bread: 2.17, banana: 0.99, apple: 0.89 }[item.to_sym]
   end
 
-  def sale_on_items(item)
+  def items_on_sale(item)
     { milk: { price: 5.00, quantity: 2 }, bread: { price: 6.00, quantity: 3 } }[item.to_sym]
   end
 end
@@ -20,10 +20,10 @@ module Store
     end
   end
 
-  class PurchaseOrder
+  class Cart
     include PriceList
 
-    attr_reader :product_price
+    attr_reader :products
 
     def initialize(items)
       @items = items
@@ -37,7 +37,7 @@ module Store
         if @products[item]
           increment_quantity(item)
         else
-          sale = sale_on_items(item)
+          sale = items_on_sale(item)
           if sale
             @products[item] = Product.new(item, item_unit_price(item), sale[:price], sale[:quantity])
           else
@@ -96,19 +96,19 @@ module Store
     private
 
       def generate_bill(items)
-        purchase_order = PurchaseOrder.new(items)
-        quantity = purchase_order.calculate_quantity
-        total_price = purchase_order.calculate_total_price
-        saved_price = purchase_order.calculate_saved_price
-        product_price = purchase_order.product_price
-        display_bill(product_price, quantity, total_price, saved_price)
+        cart = Cart.new(items)
+        products = cart.products
+        quantity = cart.calculate_quantity
+        total_price = cart.calculate_total_price
+        saved_price = cart.calculate_saved_price
+        display_bill(products, quantity, total_price, saved_price)
       end
 
       def display_bill(products, quantity, total_price, saved_price)
         puts "Item     Quantity      Price"
         puts "--------------------------------------"
         products.each do |item, value|
-          puts "#{item.ljust(10)} #{quantity[item]}           $#{products[item]}"
+          puts "#{item.ljust(10)} #{quantity[item]}           $#{value.price}"
         end
         puts "Total price : $#{total_price.round(3)}"
         puts "You saved $#{saved_price.round(3)} today."
