@@ -29,7 +29,6 @@ module Store
       @items = items
       @quantity = {}
       @products = {}
-      @product_price = {}
     end
 
     def calculate_quantity
@@ -70,12 +69,13 @@ module Store
       def calculate_price(product, quantity)
         price = product.price
         name = product.name
+        product_net_price = {}
         if product.sale_price
           sale_price = product.sale_price
           sale_quantity = product.sale_quantity
-          @product_price[name] = (quantity / sale_quantity) * sale_price + (quantity % sale_quantity) * price
+          product_net_price[name] = (quantity / sale_quantity) * sale_price + (quantity % sale_quantity) * price
         else
-          @product_price[name] = quantity * price
+          product_net_price[name] = quantity * price
         end
       end
       
