@@ -68,7 +68,7 @@ class Talk
   LIGHTNING_TALK_LENGTH = 5
 
   def initialize(talk)
-    @title, @length = *title_and_length(talk)
+    @title, @length = title_and_length(talk)
   end
 
   def self.quantity_of_tracks(talk_lists)
