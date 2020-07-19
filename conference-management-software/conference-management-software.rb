@@ -37,7 +37,7 @@ class Session
     end
 
     def length_format(length)
-      length == 5 ? "talk" : "#{length}minutes"
+      length == 5 ? "talk" : "minutes"
     end
 end
 
@@ -78,7 +78,7 @@ class Talk
       str_length = talk.split
       if str_length.last.downcase == "talk"
         length = LIGHTNING_TALK_LENGTH
-      elsif str_length != "talk"
+      elsif str_length.last == "minutes"
         length = str_length[-2..-1].join.gsub!("minutes", ' ').to_i
       else
         fail ArgumentError, "invalid talk length"
