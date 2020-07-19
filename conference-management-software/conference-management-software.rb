@@ -41,6 +41,26 @@ class Session
     end
 end
 
+class Track
+  attr_reader :morning_sessions
+  attr_reader :afternoon_sessions
+
+  def initialize
+    @morning_sessions   = Session.new("morning")
+    @afternoon_sessions = Session.new("afternoon")
+  end
+
+  def insert_talks_on_track(talk_lists)
+    talk_lists.each do |title, length|
+      if @morning_sessions.has_space?(length)
+        @morning_sessions.add(title, length)
+      elsif @afternoon_sessions.has_space?(length)
+        @afternoon_sessions.add(title, length)
+      end
+    end
+  end
+end
+
 class Talk
   attr_reader :title
   attr_reader :length
@@ -53,7 +73,6 @@ class Talk
 
   def self.quantity_of_tracks(talk_lists)
     total_length_of_talks = talk_lists.values.reduce(:+)
-
     total_length_of_sessions = Session::MORNING_LENGTH + Session::AFTERNOON_LENGTH
     (total_length_of_talks / total_length_of_sessions.to_f).ceil
   end
@@ -87,26 +106,6 @@ class Talk
     end
 end
 
-class Track
-  attr_reader :morning_sessions
-  attr_reader :afternoon_sessions
-
-  def initialize
-    @morning_sessions   = Session.new("morning")
-    @afternoon_sessions = Session.new("afternoon")
-  end
-
-  def insert_talks_on_track(talk_lists)
-    talk_lists.each do |title, length|
-      if @morning_sessions.has_space?(length)
-        @morning_sessions.add(title, length)
-      elsif @afternoon_sessions.has_space?(length)
-        @afternoon_sessions.add(title, length)
-      end
-    end
-  end
-end
-
 class ConferenceManager
   file = "#{Dir.pwd}/talks.txt"
   talk_lists = {}
@@ -115,8 +114,8 @@ class ConferenceManager
     talk_lists[talk.title] = talk.length
   end
   
-  number_of_tracks_needed = Talk.quantity_of_tracks(talk_lists)
-  number_of_tracks_needed.times do |n|
+  number_of_tracks = Talk.quantity_of_tracks(talk_lists)
+  number_of_tracks.times do |n|
     puts "TRACK #{n + 1}"
     track = Track.new
   
