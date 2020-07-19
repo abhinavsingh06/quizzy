@@ -128,7 +128,7 @@ class ConferenceManager
     puts "12:00 PM Lunch"
     puts "- AFTERNOON SESSION"
     puts track.afternoon_sessions.talks
-    puts "17:00 PM Networking Event"
+    puts "17:00 PM Networking Session"
     puts "==============================="
   end
 end
