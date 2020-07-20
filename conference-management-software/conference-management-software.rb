@@ -25,15 +25,15 @@ class Session
 
   def add(title, length)
     @available_time -= length
-    @talks << "#{schedule(length)} #{title} #{length_format(length)}"
+    @talks << "#{scheduled_time(length)} #{title} #{length_format(length)}"
   end
 
   private
   
-    def schedule(length)
-      format = format('%02d:%02d', @time.hour, @time.min)
+    def scheduled_time(length)
+      time_format = format('%02d:%02d', @time.hour, @time.min)
       @time += (60 * length)
-      format
+      time_format
     end
 
     def length_format(length)
@@ -42,22 +42,41 @@ class Session
 end
 
 class Track
-  attr_reader :morning_sessions
-  attr_reader :afternoon_sessions
+  attr_reader :morning_session
+  attr_reader :afternoon_session
 
   def initialize
-    @morning_sessions   = Session.new("morning")
-    @afternoon_sessions = Session.new("afternoon")
+    @morning_session   = Session.new("morning")
+    @afternoon_session = Session.new("afternoon")
   end
 
-  def insert_talks_on_track(talk_lists)
+  def insert_talks(talk_lists)
     talk_lists.each do |title, length|
-      if @morning_sessions.has_space?(length)
-        @morning_sessions.add(title, length)
-      elsif @afternoon_sessions.has_space?(length)
-        @afternoon_sessions.add(title, length)
+      if @morning_session.has_space?(length)
+        @morning_session.add(title, length)
+      elsif @afternoon_session.has_space?(length)
+        @afternoon_session.add(title, length)
       end
     end
+  end
+
+  def self.quantity_of_tracks(talk_lists)
+    total_length_of_talks = talk_lists.values.reduce(:+)
+    total_length_of_session = Session::MORNING_LENGTH + Session::AFTERNOON_LENGTH
+    (total_length_of_talks / total_length_of_session.to_f).ceil
+  end
+
+  def self.update_talk_lists(talk_lists, track)
+    track.morning_session.talks.each do |talk|
+      talk = talk[/(?=\s).*(?=\s)/].strip
+      talk_lists.delete_if {|key, value| key == talk }
+    end
+    
+    track.afternoon_session.talks.each do |talk|
+      talk = talk[/(?=\s).*(?=\s)/].strip
+      talk_lists.delete_if {|key, value| key == talk }
+    end
+    talk_lists
   end
 end
 
@@ -69,25 +88,6 @@ class Talk
 
   def initialize(talk)
     @title, @length = title_and_length(talk)
-  end
-
-  def self.quantity_of_tracks(talk_lists)
-    total_length_of_talks = talk_lists.values.reduce(:+)
-    total_length_of_sessions = Session::MORNING_LENGTH + Session::AFTERNOON_LENGTH
-    (total_length_of_talks / total_length_of_sessions.to_f).ceil
-  end
-
-  def self.update_talk_lists(talk_lists, track)
-    track.morning_sessions.talks.each do |talk|
-      talk = talk[/(?=\s).*(?=\s)/].strip
-      talk_lists.delete_if {|key, value| key == talk }
-    end
-    
-    track.afternoon_sessions.talks.each do |talk|
-      talk = talk[/(?=\s).*(?=\s)/].strip
-      talk_lists.delete_if {|key, value| key == talk }
-    end
-    talk_lists
   end
 
   private
@@ -114,19 +114,19 @@ class ConferenceManager
     talk_lists[talk.title] = talk.length
   end
   
-  number_of_tracks = Talk.quantity_of_tracks(talk_lists)
+  number_of_tracks = Track.quantity_of_tracks(talk_lists)
   number_of_tracks.times do |n|
     puts "TRACK #{n + 1}"
     track = Track.new
   
-    track.insert_talks_on_track(talk_lists)
-    talk_lists = Talk.update_talk_lists(talk_lists, track)
+    track.insert_talks(talk_lists)
+    talk_lists = Track.update_talk_lists(talk_lists, track)
   
     puts "- MORNING SESSION"
-    puts track.morning_sessions.talks
+    puts track.morning_session.talks
     puts "12:00 PM Lunch"
     puts "- AFTERNOON SESSION"
-    puts track.afternoon_sessions.talks
+    puts track.afternoon_session.talks
     puts "17:00 PM Networking Session"
     puts "==============================="
   end
