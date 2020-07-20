@@ -1,8 +1,8 @@
 require "time"
 
 class Session
-  attr_reader :talks
-  attr_reader :available_time
+  attr_accessor :talks
+  attr_accessor :available_time
   attr_reader :time
 
   MORNING_LENGTH = 180
@@ -19,11 +19,13 @@ class Session
     end
   end
 
-  def has_space?(talk_length)
-    @available_time >= talk_length
+  def can_fit?(talk)
+    @available_time >= talk[1]
   end
 
-  def add(title, length)
+  def add(talk)
+    title = talk[0]
+    length = talk[1]
     @available_time -= length
     @talks << "#{scheduled_time(length)} #{title} #{length_format(length)}"
   end
@@ -51,11 +53,11 @@ class Track
   end
 
   def insert_talks(talk_lists)
-    talk_lists.each do |title, length|
-      if @morning_session.has_space?(length)
-        @morning_session.add(title, length)
-      elsif @afternoon_session.has_space?(length)
-        @afternoon_session.add(title, length)
+    talk_lists.each do |talk|
+      if @morning_session.can_fit?(talk)
+        @morning_session.add(talk)
+      elsif @afternoon_session.can_fit?(talk)
+        @afternoon_session.add(talk)
       end
     end
   end
@@ -107,27 +109,40 @@ class Talk
 end
 
 class ConferenceManager
-  file = "#{Dir.pwd}/talks.txt"
-  talk_lists = {}
-  File.readlines(file).each do |line|
-    talk = Talk.new(line.strip)
-    talk_lists[talk.title] = talk.length
+  def initialize
+    @talk_lists = {}
+    read_file
   end
-  
-  number_of_tracks = Track.quantity_of_tracks(talk_lists)
-  number_of_tracks.times do |n|
-    puts "TRACK #{n + 1}"
-    track = Track.new
-  
-    track.insert_talks(talk_lists)
-    talk_lists = Track.update_talk_lists(talk_lists, track)
-  
-    puts "- MORNING SESSION"
-    puts track.morning_session.talks
-    puts "12:00 PM Lunch"
-    puts "- AFTERNOON SESSION"
-    puts track.afternoon_session.talks
-    puts "17:00 PM Networking Session"
-    puts "==============================="
-  end
+
+  private
+
+    def read_file
+      file = "#{Dir.pwd}/talks.txt"
+      File.readlines(file).each do |line|
+        talk = Talk.new(line.strip)
+        @talk_lists[talk.title] = talk.length
+      end
+      display_schedule
+    end
+
+    def display_schedule
+      number_of_tracks = Track.quantity_of_tracks(@talk_lists)
+      number_of_tracks.times do |n|
+        puts "TRACK #{n + 1}"
+        track = Track.new
+      
+        track.insert_talks(@talk_lists)
+        talk_lists = Track.update_talk_lists(@talk_lists, track)
+
+        puts "- MORNING SESSION"
+        puts track.morning_session.talks
+        puts "12:00 PM Lunch"
+        puts "- AFTERNOON SESSION"
+        puts track.afternoon_session.talks
+        puts "17:00 PM Networking Session"
+        puts "==============================="
+      end
+    end
 end
+
+ConferenceManager.new
