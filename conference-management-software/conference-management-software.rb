@@ -122,10 +122,10 @@ class ConferenceManager
         talk = Talk.new(line.strip)
         @talk_lists[talk.title] = talk.length
       end
-      display_schedule
+      generate_schedule
     end
 
-    def display_schedule
+    def generate_schedule
       number_of_tracks = Track.quantity_of_tracks(@talk_lists)
       number_of_tracks.times do |n|
         puts "TRACK #{n + 1}"
