@@ -112,6 +112,7 @@ class ConferenceManager
   def initialize
     @talk_lists = {}
     read_file
+    display_schedule
   end
 
   private
@@ -122,7 +123,6 @@ class ConferenceManager
         talk = Talk.new(line.strip)
         @talk_lists[talk.title] = talk.length
       end
-      display_schedule
     end
 
     def display_schedule
