@@ -22,15 +22,16 @@ function Option({
   return (
     <div
       className={`${
-        option.is_correct && submitted ? 'border rounded border-success' : ''
-      } input-group mt-1`}>
+        option.value && submitted ? 'border rounded border-success' : ''
+      } input-group mt-1`}
+      >
       <div className="input-group-prepend">
         <div className="input-group-text">
           <input
             type="radio"
             className="option-select"
             defaultChecked={
-              question ? selectedAnswer == option.value : option.is_correct
+              question ? selectedAnswer == option.value : ""
             }
             defaultValue={option.value}
             name={question ? `${question - 1}-option` : ''}
@@ -47,7 +48,8 @@ function Option({
         value={option.value}
         disabled
       />
-      {question && !submitted ? '' : option.is_correct ? <CorrectOption /> : ''}
+      {/* {question && !submitted ? '' : option.is_correct ? <CorrectOption /> : ''} */}
+      {question && !submitted ? '' : option.is_correct ? "" : ''}
     </div>
   );
 }

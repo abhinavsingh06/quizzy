@@ -53,8 +53,8 @@ class QuestionForm extends React.Component {
         description: question ? question.description : '',
         question_multiple_choice_attributes: {
           options: new Array(optionCount).fill(0).map((_, idx) => ({
-            is_correct:
-              options && options[idx] ? options[idx].is_correct : false,
+            // is_correct:
+            //   options && options[idx] ? options[idx].is_correct : false,
             value: options && options[idx] ? options[idx].value : '',
           })),
         },
@@ -70,13 +70,13 @@ class QuestionForm extends React.Component {
         ...this.state.question,
         question_multiple_choice_attributes: {
           options: options.map((option, idx) => {
-            if (name == 'is_correct') {
-              return idx == dataset.id
-                ? { ...option, is_correct: true }
-                : { ...option, is_correct: false };
-            } else {
+            // if (name == 'is_correct') {
+            //   return idx == dataset.id
+            //     ? { ...option, is_correct: true }
+            //     : { ...option, is_correct: false };
+            // } else {
               return idx == dataset.id ? { ...option, value: value } : option;
-            }
+            // }
           }),
         },
       },
@@ -96,7 +96,8 @@ class QuestionForm extends React.Component {
       question: {
         ...question,
         question_multiple_choice_attributes: {
-          options: options.concat([{ is_correct: false, value: '' }]),
+          // options: options.concat([{ is_correct: false, value: '' }]),
+          options: options.concat([{ value: '' }]),
         },
       },
     });
@@ -180,11 +181,11 @@ class QuestionForm extends React.Component {
                     oldValue={
                       options && options[option] ? options[option].value : ''
                     }
-                    isCorrect={
-                      options && options[option]
-                        ? options[option].is_correct
-                        : false
-                    }
+                    // isCorrect={
+                    //   options && options[option]
+                    //     ? options[option].is_correct
+                    //     : false
+                    // }
                     key={`${quiz.id}-${option + 1}`}
                   />
                 ))}

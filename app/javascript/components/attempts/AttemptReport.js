@@ -3,7 +3,11 @@ import { useTable } from 'react-table';
 import { fetchApi } from '../../utils/API';
 import * as Routes from '../../utils/Routes';
 
-function ReportsTable({ quizzes }) {
+function ReportsTable(props) {
+  
+  const {quizzes} = props;
+  console.log(props);
+  
   let reports = quizzes
     .map(rep => {
       return rep.attempts.map(attempt => attempt);
@@ -212,6 +216,8 @@ class AttemptReport extends React.Component {
 
   render() {
     const { quizzes } = this.props;
+    console.log(this.props)
+
     return (
       <div className="container">
         <div className="card bg-dark text-white">

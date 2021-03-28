@@ -62,6 +62,7 @@ class Quizzes::AttemptsController < ApplicationController
 
   def attempt_attributes
     result = QuestionsChecker.call(@questions, attempt_params[:attempt_answers_attributes])
-    attempt_params.merge(submitted: true, correct_answers_count: result[:correct_answers], incorrect_answers_count: result[:incorrect_answers])
+    # attempt_params.merge(submitted: true, correct_answers_count: result[:correct_answers], incorrect_answers_count: result[:incorrect_answers])
+    attempt_params.merge(submitted: true)
   end
 end

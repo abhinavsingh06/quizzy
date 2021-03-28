@@ -1,6 +1,11 @@
-json.quizzes @quizzes do |quiz|
-  json.attempts quiz.submitted_attempts do |attempt|
-    json.quiz quiz.name
-    json.extract! attempt, :user, :correct_answers_count, :incorrect_answers_count
+json.quiz do
+  json.quiz @quiz.name
+  json.questions @quiz.questions do |question|
+    json.description question.description
+    json.id question.id
+  end
+
+  json.array!(@attempts) do |json, attempt|
+    json.set!(attempt.attempt_answers)
   end
 end

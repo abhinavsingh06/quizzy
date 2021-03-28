@@ -17,7 +17,7 @@ function OptionInput({
             className="option-select"
             data-id={option - 1}
             onChange={handleChange}
-            defaultChecked={isCorrect}
+            // defaultChecked={isCorrect}
           />
         </div>
       </div>

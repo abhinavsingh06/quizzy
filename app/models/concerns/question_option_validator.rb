@@ -17,8 +17,8 @@ class QuestionOptionValidator < ActiveModel::Validator
       end
     end
 
-    unless correct_option
-      record.errors.add(:option, "should have a correct answer")
-    end
+    # unless correct_option
+    #   record.errors.add(:option, "should have a correct answer")
+    # end
   end
 end

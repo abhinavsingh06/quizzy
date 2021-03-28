@@ -10,7 +10,8 @@ class QuestionsChecker < ApplicationService
   def call
     @questions.each do |question|
       answer = @answers.detect { |ans| ans["question_id"] == question["id"] }
-      @correct_answers += 1 if check_question?(question, answer["answer"])
+      @correct_answers += 1
+      # if check_question?(question, answer["answer"])
     end
     {
       correct_answers: @correct_answers, incorrect_answers: @questions.count - @correct_answers
@@ -21,7 +22,7 @@ class QuestionsChecker < ApplicationService
   
   def check_question?(question, answer)
     correct_option = question["question_multiple_choice"]["options"].detect do |option|
-      option["is_correct"]
+      option["value"]
     end
     correct_option["value"] == answer
   end
