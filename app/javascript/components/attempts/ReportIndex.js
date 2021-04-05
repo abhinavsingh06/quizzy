@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import * as Routes from '../../utils/Routes';
 import AttemptReport from "./AttemptReport";
 
 export class ReportIndex extends Component {
@@ -7,8 +8,13 @@ export class ReportIndex extends Component {
     this.state = {};
   }
 
+  onSelect = (id) => {
+    window.location.href = Routes.report_path(id.target.value)
+  }
+
   render() {
     const { quizzes } = this.props;
+    console.log(quizzes);
 
     return (
       <div>
@@ -18,15 +24,14 @@ export class ReportIndex extends Component {
               Select your quiz to see the report
             </h1>
             <select
-              className="form-select form-select-lg mb-3"
+              className="form-select form-select-lg mb-3 m-2"
               aria-label=".form-select-lg example"
+              defaultValue="Click this !"
+              onChange={this.onSelect}
             >
               {quizzes
                 ? quizzes.map((quiz, id) => (
-                    <>
-                      {/* <option selected>Click this !</option> */}
-                      <option value={id}>{quiz}</option>
-                    </>
+                     <option key={quiz.id} value={quiz.id}>{quiz.name}</option>                   
                   ))
                 : ""}
             </select>

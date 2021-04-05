@@ -85,3 +85,7 @@ export function update_attempt_path(slug, id) {
 export function reports_path() {
   return `/reports`;
 }
+
+export function report_path(id) {
+  return `/reports/${id}`;
+}

@@ -3,7 +3,7 @@ class ReportsController < ApplicationController
   before_action :load_quiz, only: [:show]
 
   def index
-    @quizzes = current_user.quizzes.pluck(:name, :id)
+    @quizzes = current_user.quizzes
   end
 
   def create
@@ -12,21 +12,22 @@ class ReportsController < ApplicationController
   end
   
   def show
-    @attempts = @quiz.attempts.all
-    # @quizzes = current_user.quizzes.published.eager_load(submitted_attempts: :user)
-    # @quiz = current_user.quizzes.find(quiz_report_params.id) 
-    # respond_to do |format|
-    #   format.html
-    #   format.csv do
-    #     if params[:job_id]
-    #       current_job = current_user.jobs.find_by(job_id: params[:job_id])
-    #       if current_job && current_job[:status] == "done"
-    #         return send_file current_job.filename, type: "application/csv"
-    #       end
-    #       render status: :ok, json: { processing: true, notice: "Processing", job_id: current_job }
-    #     end
-    #   end
-    # end
+    @quizzes = current_user.quizzes
+    @question = {}
+    @quiz.questions.each do |question|
+      @question[question.id] = { "description": question.description }
+      @question[question.id]['count'] = {}
+      @quiz.attempts.each do |attempt|
+        attempt_answer = attempt.attempt_answers.find_by_question_id(question.id)
+        if !attempt_answer.nil? && question.id == attempt_answer.question_id
+          if @question[question.id]['count'].key?(attempt_answer.answer)
+            @question[question.id]['count'][attempt_answer.answer] += 1
+          else
+            @question[question.id]['count'][attempt_answer.answer] = 1
+          end
+        end
+      end
+    end
   end
 
   private
